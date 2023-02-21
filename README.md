@@ -1,0 +1,2 @@
+# WGC-API
+WGC-API 서버

@@ -31,4 +31,9 @@ public class ResponseDto {
         this.status = HttpStatus.OK.value();
         this.data = data;
     }
+
+    public ResponseDto(HttpStatus httpStatus, String message) {
+        this.status = httpStatus.value();
+        this.message = message;
+    }
 }

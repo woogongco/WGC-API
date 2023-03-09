@@ -24,7 +24,7 @@ public class JwtService {
 
     private final String encryptKey = "wgc-api-jwt-sign-cd1b0b0f-be7d-11ed-b6ef-064f53adf942";
     private final SignatureAlgorithm sign = SignatureAlgorithm.HS512;
-    private byte[] secretKeyBytes = DatatypeConverter.parseBase64Binary(this.encryptKey);
+    private final byte[] secretKeyBytes = DatatypeConverter.parseBase64Binary(this.encryptKey);
     private final Key signKey = new SecretKeySpec(this.secretKeyBytes, sign.getJcaName());
     private final Date expireDate = new Date(System.currentTimeMillis() + (2592000000L * 12 * 3));
 

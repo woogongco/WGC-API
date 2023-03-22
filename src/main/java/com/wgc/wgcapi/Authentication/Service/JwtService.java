@@ -4,9 +4,8 @@ Created on 2023/03/09 10:23 PM In Intelli J IDEA
 by jeon-wangi
 */
 
-import com.wgc.wgcapi.Member.DTO.MemberDto;
 import com.wgc.wgcapi.Member.Entity.Member;
-import com.wgc.wgcapi.Member.Repository.MemberRepository;
+import com.wgc.wgcapi.Member.Repository.MemberRepositoryImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -22,15 +21,15 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtService {
 
-    private final String encryptKey = "wgc-api-jwt-sign-cd1b0b0f-be7d-11ed-b6ef-064f53adf942";
+    private final String encryptKey = "cd1b0b0fbe7d11edb6ef064f53adf942cd1b0b0fbe7d11edb6ef064f53adf942cd1b0b0fbe7d11edb6ef064f53adf942";
     private final SignatureAlgorithm sign = SignatureAlgorithm.HS512;
     private final byte[] secretKeyBytes = DatatypeConverter.parseBase64Binary(this.encryptKey);
     private final Key signKey = new SecretKeySpec(this.secretKeyBytes, sign.getJcaName());
     private final Date expireDate = new Date(System.currentTimeMillis() + (2592000000L * 12 * 3));
 
-    private final MemberRepository memberRepository;
+    private final MemberRepositoryImpl memberRepository;
 
-    public String generate(MemberDto member) {
+    public String generate(Member member) {
         return Jwts.builder()
                 .claim("id", member.getId())
                 .claim("name", member.getName())

@@ -5,16 +5,14 @@ by jeon-wangi
 */
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-@Component
 @Slf4j
 public class EncryptUtils {
-    public String encrypt(String input) {
+    public static String encrypt(String input) {
         if (input == null || input.isBlank())
             throw new IllegalArgumentException("input is not present !");
         try {

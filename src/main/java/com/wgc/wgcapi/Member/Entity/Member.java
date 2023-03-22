@@ -4,9 +4,13 @@ Created on 2023/03/09 10:27 PM In Intelli J IDEA
 by jeon-wangi
 */
 
+import com.wgc.wgcapi.Member.DTO.SignUpUserDto;
+import com.wgc.wgcapi.Member.Repository.MemberRepositoryImpl;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +19,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Member {
 
     @Id
@@ -31,8 +36,15 @@ public class Member {
     private String password;
 
     @Column(name = "permission")
-    private String permission;
+    private String permission = "MEMBER";
 
     @Column(name = "register_dt")
+    @CreatedDate
     private LocalDateTime registerDateTime;
+
+    public Member(String name, String mail, String password) {
+        this.name = name;
+        this.mail = mail;
+        this.password = password;
+    }
 }

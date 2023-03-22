@@ -1,26 +1,15 @@
 package com.wgc.wgcapi.Member.Repository;
 /*
-Created on 2023/03/09 10:46 PM In Intelli J IDEA 
+Created on 2023/03/22 11:44 PM In Intelli J IDEA 
 by jeon-wangi
 */
 
 import com.wgc.wgcapi.Member.Entity.Member;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
-@Repository
-@Transactional
-@RequiredArgsConstructor
-public class MemberRepository {
+    Member findByMail(String mail);
 
-    @PersistenceContext
-    private final EntityManager em;
-
-    public Member find(Long id) {
-        return em.find(Member.class, id);
-    }
+    Member findMemberByMailIsAndPasswordIs(String name, String password);
 }

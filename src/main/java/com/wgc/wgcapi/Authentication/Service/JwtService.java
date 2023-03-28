@@ -29,7 +29,7 @@ public class JwtService {
 
     private final MemberRepositoryImpl memberRepository;
 
-    public String generate(Member member) {
+    public String generate(Member member) { // 멤버 정보로 토큰 생성
         return Jwts.builder()
                 .claim("id", member.getId())
                 .claim("name", member.getName())
@@ -40,13 +40,13 @@ public class JwtService {
                 .compact();
     }
 
-    public Member validate(String token) {
+    public Member validate(String token) { // 난수 문자열(토큰)을 Member 객체로 복호화해서 멤버를 찾음
         Claims claims = this.getClaim(token);
         Long memberId = Long.parseLong(String.valueOf(claims.get("id")));
         return memberRepository.find(memberId);
     }
 
-    private Claims getClaim(String token) {
+    private Claims getClaim(String token) { // 복호화
         return Jwts.parserBuilder()
                 .setSigningKey(this.signKey)
                 .build()

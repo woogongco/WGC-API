@@ -55,7 +55,7 @@ public class MemberService {
         return new ResponseDto(token);
     }
 
-    public String encryptPassword(String password) {
+    private String encryptPassword(String password) {
         return EncryptUtils.encrypt(password);
     }
 

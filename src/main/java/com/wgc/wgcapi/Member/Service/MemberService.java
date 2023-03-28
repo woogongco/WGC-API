@@ -5,8 +5,10 @@ by jeon-wangi
 */
 
 import com.wgc.wgcapi.Authentication.Service.AuthenticationService;
+import com.wgc.wgcapi.Authentication.Service.JwtService;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
 import com.wgc.wgcapi.Common.Utils.EncryptUtils;
+import com.wgc.wgcapi.Member.DTO.MemberDto;
 import com.wgc.wgcapi.Member.DTO.SignInUserDto;
 import com.wgc.wgcapi.Member.DTO.SignUpUserDto;
 import com.wgc.wgcapi.Member.Entity.Member;
@@ -27,6 +29,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberRepositoryImpl memberRepositoryImpl;
     private final AuthenticationService authenticationService;
+    private final JwtService jwtService;
 
     public ResponseDto signUp(SignUpUserDto dto) {
         try {
@@ -54,5 +57,11 @@ public class MemberService {
 
     public String encryptPassword(String password) {
         return EncryptUtils.encrypt(password);
+    }
+
+    public ResponseDto getMemberByToken(String token) {
+        Member member = this.jwtService.validate(token);
+        MemberDto dto = member.asDto();
+        return new ResponseDto(dto);
     }
 }

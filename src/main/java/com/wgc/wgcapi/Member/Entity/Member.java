@@ -4,6 +4,7 @@ Created on 2023/03/09 10:27 PM In Intelli J IDEA
 by jeon-wangi
 */
 
+import com.wgc.wgcapi.Member.DTO.MemberDto;
 import com.wgc.wgcapi.Member.DTO.SignUpUserDto;
 import com.wgc.wgcapi.Member.Repository.MemberRepositoryImpl;
 import lombok.AllArgsConstructor;
@@ -46,5 +47,9 @@ public class Member {
         this.name = name;
         this.mail = mail;
         this.password = password;
+    }
+
+    public MemberDto asDto(){
+        return new MemberDto(this);
     }
 }

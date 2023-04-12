@@ -4,15 +4,15 @@ Created on 2023/03/09 10:20 PM In Intelli J IDEA
 by jeon-wangi
 */
 
+import com.wgc.wgcapi.Common.DTO.ResponseDto;
 import com.wgc.wgcapi.Member.Entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.swing.border.CompoundBorder;
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -25,8 +25,13 @@ public class AuthenticationService {
         return jwtService.generate(member);
     }
 
-    public Member validateToken(String token) {
-        return this.jwtService.validate(token);
+    public ResponseDto validateToken(Map<String, String> param) {
+        String token = param.get("token");
+        if (Objects.isNull(token))
+            return new ResponseDto(HttpStatus.BAD_REQUEST, "Request parameter token is missing !");
+
+        Member member = this.jwtService.validate(token);
+        return new ResponseDto(member.asDto());
     }
 
 }

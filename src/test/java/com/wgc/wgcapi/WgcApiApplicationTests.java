@@ -1,16 +1,20 @@
 package com.wgc.wgcapi;
 
+import com.wgc.wgcapi.Member.Repository.MemberRepositoryImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashSet;
+import java.util.Set;
 
-//@SpringBootTest
+@SpringBootTest
 class WgcApiApplicationTests {
 
     @Test

@@ -17,8 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(value = { IllegalAccessException.class })
-    protected ResponseDto illegalAccessExceptionHandler(Exception e, Object body, WebRequest request) {
+    protected ResponseDto illegalAccessExceptionHandler(IllegalAccessException e, Object body, WebRequest request) {
         return new ResponseDto(HttpStatus.BAD_REQUEST, e);
+    }
+
+    @ExceptionHandler(value = { Exception.class })
+    protected ResponseDto CommonExceptionHandler(Exception e, Object body, WebRequest request) {
+        return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
 
     @ExceptionHandler(value = { NoHandlerFoundException.class })

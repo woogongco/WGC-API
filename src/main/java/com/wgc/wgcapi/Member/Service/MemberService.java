@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -34,7 +35,7 @@ public class MemberService {
     public ResponseDto signUp(SignUpUserDto dto) {
         try {
             Member member = memberRepository.findByMail(dto.getMail());
-            if (member != null)
+            if (Objects.nonNull(member))
                 return new ResponseDto(HttpStatus.BAD_REQUEST, "Member is already exist !");
 
             memberRepository.save(dto.asEntity());
@@ -46,20 +47,16 @@ public class MemberService {
     }
 
     public ResponseDto signIn(SignInUserDto dto) {
-        String encryptPassword = this.encryptPassword(dto.getPassword());
+        String encryptPassword = EncryptUtils.encrypt(dto.getPassword());
         Member member = memberRepository.findMemberByMailIsAndPasswordIs(dto.getMail(), encryptPassword);
-        if (member == null)
+        if (Objects.isNull(member))
             return new ResponseDto(HttpStatus.BAD_REQUEST, "User is not found !");
 
         String token = authenticationService.getAuthenticationToken(member);
         return new ResponseDto(token);
     }
 
-    private String encryptPassword(String password) {
-        return EncryptUtils.encrypt(password);
-    }
-
-    public ResponseDto getMemberByToken(String token) {
+    public ResponseDto validateToken(String token) {
         Member member = this.jwtService.validate(token);
         MemberDto dto = member.asDto();
         return new ResponseDto(dto);

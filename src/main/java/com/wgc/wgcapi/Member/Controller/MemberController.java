@@ -18,7 +18,7 @@ public class MemberController {
 
     private final MemberService service;
 
-    @PostMapping
+    @PutMapping
     public ResponseDto signUp(@RequestBody SignUpUserDto dto) {
         return service.signUp(dto);
     }
@@ -26,10 +26,5 @@ public class MemberController {
     @PostMapping("/sign")
     public ResponseDto signIn(@RequestBody SignInUserDto dto) {
         return service.signIn(dto);
-    }
-
-    @GetMapping("/validate")
-    public ResponseDto getUserInformation(@RequestHeader(name = "token") String token) {
-        return this.service.getMemberByToken(token);
     }
 }

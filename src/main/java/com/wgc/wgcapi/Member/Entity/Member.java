@@ -5,8 +5,6 @@ by jeon-wangi
 */
 
 import com.wgc.wgcapi.Member.DTO.MemberDto;
-import com.wgc.wgcapi.Member.DTO.SignUpUserDto;
-import com.wgc.wgcapi.Member.Repository.MemberRepositoryImpl;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -33,7 +33,7 @@ public class TokenAspect {
             return;
 
         Member member = jwtService.validate(token);
-        request.setAttribute("claims", member);
+        request.setAttribute("claim", member);
     }
 
     private String getTokenByHeader(HttpServletRequest request) {

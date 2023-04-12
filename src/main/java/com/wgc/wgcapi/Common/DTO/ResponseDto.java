@@ -22,6 +22,11 @@ public class ResponseDto {
         this.message = httpStatus.getReasonPhrase();
     }
 
+    public ResponseDto(HttpStatus httpStatus, Object data) {
+        this.status = httpStatus.value();
+        this.data = data;
+    }
+
     public ResponseDto(HttpStatus httpStatus, Exception e) {
         this.status = httpStatus.value();
         this.message = e.getMessage();

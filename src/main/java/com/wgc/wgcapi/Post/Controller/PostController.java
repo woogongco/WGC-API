@@ -11,6 +11,8 @@ import com.wgc.wgcapi.Post.Service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/post")
@@ -20,7 +22,7 @@ public class PostController {
 
     @PostMapping
     @RequireToken
-    public ResponseDto writePost(@RequestBody WritePostDto dto) {
-        return this.postService.writePost(dto);
+    public ResponseDto writePost(@RequestBody WritePostDto dto, HttpServletRequest request) {
+        return this.postService.writePost(request, dto);
     }
 }

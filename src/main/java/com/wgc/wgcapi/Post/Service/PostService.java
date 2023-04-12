@@ -34,7 +34,7 @@ public class PostService {
         Category category = categoryDataRepository.findCategoryById(dto.getCategoryId());
         Post post = dto.asPostEntity(member, category);
         Post newPost = postJpaRepository.save(post);
-        return new ResponseDto(HttpStatus.CREATED, newPost);
+        return new ResponseDto(HttpStatus.CREATED);
     }
 
 }

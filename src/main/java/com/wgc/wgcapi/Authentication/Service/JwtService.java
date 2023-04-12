@@ -41,6 +41,8 @@ public class JwtService {
     }
 
     public Member validate(String token) { // 난수 문자열(토큰)을 Member 객체로 복호화해서 멤버를 찾음
+        if (token.contains("Bearer "))
+            token = token.replaceAll("Bearer ", "");
         Claims claims = this.getClaim(token);
         Long memberId = Long.parseLong(String.valueOf(claims.get("id")));
         return memberRepository.find(memberId);

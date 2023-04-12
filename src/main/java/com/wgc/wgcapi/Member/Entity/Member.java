@@ -5,6 +5,7 @@ by jeon-wangi
 */
 
 import com.wgc.wgcapi.Member.DTO.MemberDto;
+import com.wgc.wgcapi.Post.Entity.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -41,13 +44,16 @@ public class Member {
     @CreatedDate
     private LocalDateTime registerDateTime;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "writer")
+    private Set<Post> posts = new HashSet<>();
+
     public Member(String name, String mail, String password) {
         this.name = name;
         this.mail = mail;
         this.password = password;
     }
 
-    public MemberDto asDto(){
+    public MemberDto asDto() {
         return new MemberDto(this);
     }
 }

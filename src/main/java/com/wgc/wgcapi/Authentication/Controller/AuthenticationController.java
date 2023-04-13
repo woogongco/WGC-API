@@ -19,7 +19,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/validate")
-    public ResponseDto getUserInformation(@RequestBody Map<String, String> param) {
+    public ResponseDto getUserInformation(@RequestBody Map<String, String> param) throws IllegalAccessException {
         return this.authenticationService.validateToken(param);
     }
 }

@@ -5,6 +5,7 @@ by jeon-wangi
 */
 
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import javax.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice
+@Slf4j
 public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(value = { IllegalAccessException.class })
@@ -23,7 +25,8 @@ public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(value = { Exception.class })
     protected ResponseDto CommonExceptionHandler(Exception e, Object body, WebRequest request) {
-        return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        log.error("error message = {}", e.getMessage());
+        return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, e.getCause() + "\n" + e.getMessage());
     }
 
     @ExceptionHandler(value = { NoHandlerFoundException.class })

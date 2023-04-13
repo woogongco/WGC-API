@@ -16,6 +16,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
+import java.util.Objects;
 import java.util.Optional;
 
 @Configuration
@@ -43,11 +44,14 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private void validate(HandlerMethod handler, HttpServletRequest request) throws IllegalAccessException {
         RequireToken annotation = this.getAnnotation(handler, RequireToken.class);
         String token = request.getHeader("Authorization");
-        if (isAnnotationExists(annotation) && token == null)
+        boolean existAnnotation = isAnnotationExists(annotation);
+        if (existAnnotation && token == null)
             throw new IllegalAccessException("Require Token is missing !");
-
-        Member member = jwtService.validate(token);
-        request.setAttribute("claim", member);
+        if (existAnnotation) {
+            Member member = jwtService.validate(token);
+            if (Objects.nonNull(member))
+                request.setAttribute("claim", member);
+        }
     }
 
     private boolean isAnnotationExists(RequireToken annotation) {

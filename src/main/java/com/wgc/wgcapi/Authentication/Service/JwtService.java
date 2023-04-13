@@ -16,6 +16,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +41,10 @@ public class JwtService {
                 .compact();
     }
 
-    public Member validate(String token) { // 난수 문자열(토큰)을 Member 객체로 복호화해서 멤버를 찾음
+    public Member validate(String token) throws IllegalAccessException { // 난수 문자열(토큰)을 Member 객체로 복호화해서 멤버를 찾음
+        if(Objects.isNull(token))
+            throw new IllegalAccessException("Token is not present !");
+
         if (token.contains("Bearer "))
             token = token.replaceAll("Bearer ", "");
         Claims claims = this.getClaim(token);

@@ -25,7 +25,7 @@ public class AuthenticationService {
         return jwtService.generate(member);
     }
 
-    public ResponseDto validateToken(Map<String, String> param) {
+    public ResponseDto validateToken(Map<String, String> param) throws IllegalAccessException {
         String token = param.get("token");
         if (Objects.isNull(token))
             return new ResponseDto(HttpStatus.BAD_REQUEST, "Request parameter token is missing !");

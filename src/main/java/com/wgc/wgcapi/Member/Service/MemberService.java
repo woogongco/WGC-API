@@ -55,10 +55,4 @@ public class MemberService {
         String token = authenticationService.getAuthenticationToken(member);
         return new ResponseDto(token);
     }
-
-    public ResponseDto validateToken(String token) {
-        Member member = this.jwtService.validate(token);
-        MemberDto dto = member.asDto();
-        return new ResponseDto(dto);
-    }
 }

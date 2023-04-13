@@ -25,7 +25,7 @@ public class TokenAspect {
     private final JwtService jwtService;
 
     @Pointcut("execution(* com.wgc.wgcapi.*.Controller.*(..))")
-    public void parseToken(JoinPoint joinPoint) {
+    public void parseToken(JoinPoint joinPoint) throws IllegalAccessException {
         HttpServletRequest request = (HttpServletRequest) joinPoint.getArgs()[0];
         String token = this.getTokenByHeader(request);
 

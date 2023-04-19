@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MemberController {
 
     private final MemberService service;
 
-    @PutMapping
+    @PostMapping
     public ResponseDto signUp(@RequestBody SignUpUserDto dto) {
         return service.signUp(dto);
     }

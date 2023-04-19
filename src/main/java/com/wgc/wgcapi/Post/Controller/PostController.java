@@ -39,4 +39,9 @@ public class PostController {
     public ResponseDto deletePost(@PathVariable(name = "id") Long id, HttpServletRequest request) {
         return this.postService.deletePost(request, id);
     }
+
+    @GetMapping("/{id}")
+    public ResponseDto getPost(@PathVariable(name = "id") Long id) {
+        return this.postService.getPost(id);
+    }
 }

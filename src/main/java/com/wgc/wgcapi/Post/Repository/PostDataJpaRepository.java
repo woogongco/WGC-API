@@ -10,4 +10,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface PostDataJpaRepository extends JpaRepository<Post, Long>, CrudRepository<Post, Long> {
 
+    Post findPostByIdAndIsDeleteEquals(Long id, Character isDelete);
+
 }

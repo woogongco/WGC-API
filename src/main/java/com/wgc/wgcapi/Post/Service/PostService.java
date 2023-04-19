@@ -7,6 +7,7 @@ by jeon-wangi
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
 import com.wgc.wgcapi.Member.Entity.Member;
 import com.wgc.wgcapi.Post.DTO.EditPostDto;
+import com.wgc.wgcapi.Post.DTO.ResponsePostDto;
 import com.wgc.wgcapi.Post.DTO.WritePostDto;
 import com.wgc.wgcapi.Post.Entity.Category;
 import com.wgc.wgcapi.Post.Entity.Post;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -59,7 +61,7 @@ public class PostService {
     }
 
     public Post findPostById(Long id) {
-        return this.postJpaRepository.findById(id).get();
+        return this.postJpaRepository.findPostByIdAndIsDeleteEquals(id, 'N');
     }
 
     public ResponseDto deletePost(HttpServletRequest request, Long id) {
@@ -67,8 +69,10 @@ public class PostService {
         Post post = this.findPostById(id);
 
         Long writerId = post.getWriter().getId();
-        if (member.getId().equals(writerId) || member.getPermission().equals("ADMIN"))
+        if (member.getId().equals(writerId) || member.getPermission().equals("ADMIN")) {
             post.delete();
+            return new ResponseDto(HttpStatus.OK);
+        }
 
         return new ResponseDto(HttpStatus.BAD_REQUEST);
     }
@@ -76,4 +80,14 @@ public class PostService {
     private Member getMemberInfo(HttpServletRequest request) {
         return (Member) request.getAttribute("claim");
     }
+
+    public ResponseDto getPost(Long id) {
+        Post post = this.findPostById(id);
+        if (Objects.isNull(post))
+            return new ResponseDto(HttpStatus.NOT_FOUND, "post is not found !");
+
+        ResponsePostDto dto = new ResponsePostDto(post, post.getWriter());
+        return new ResponseDto(dto);
+    }
+
 }

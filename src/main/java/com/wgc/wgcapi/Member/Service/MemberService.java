@@ -8,7 +8,6 @@ import com.wgc.wgcapi.Authentication.Service.AuthenticationService;
 import com.wgc.wgcapi.Authentication.Service.JwtService;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
 import com.wgc.wgcapi.Common.Utils.EncryptUtils;
-import com.wgc.wgcapi.Member.DTO.MemberDto;
 import com.wgc.wgcapi.Member.DTO.SignInUserDto;
 import com.wgc.wgcapi.Member.DTO.SignUpUserDto;
 import com.wgc.wgcapi.Member.Entity.Member;
@@ -19,12 +18,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;

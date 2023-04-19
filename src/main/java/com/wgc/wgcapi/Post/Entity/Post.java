@@ -5,11 +5,14 @@ by jeon-wangi
 */
 
 import com.wgc.wgcapi.Member.Entity.Member;
+import com.wgc.wgcapi.Post.DTO.EditPostDto;
 import com.wgc.wgcapi.Post.DTO.WritePostDto;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -21,6 +24,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 @EntityListeners(AuditingEntityListener.class)
+@Getter
 public class Post {
 
     @Id
@@ -51,10 +55,20 @@ public class Post {
     @CreatedDate
     private LocalDateTime registerDate;
 
+    @Column(name = "last_update")
+    @LastModifiedDate
+    private LocalDateTime lastUpdateDate;
+
     public Post(Member member, Category category, WritePostDto writePostDto) {
         this.writer = member;
         this.category = category;
         this.title = writePostDto.getTitle();
         this.content = writePostDto.getContent();
+    }
+
+    public void edit(EditPostDto dto, Category category) {
+        this.category = category;
+        this.title = dto.getTitle();
+        this.content = dto.getContent();
     }
 }

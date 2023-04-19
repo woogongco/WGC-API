@@ -6,6 +6,7 @@ by jeon-wangi
 
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
 import com.wgc.wgcapi.Member.Entity.Member;
+import com.wgc.wgcapi.Post.DTO.EditPostDto;
 import com.wgc.wgcapi.Post.DTO.WritePostDto;
 import com.wgc.wgcapi.Post.Entity.Category;
 import com.wgc.wgcapi.Post.Entity.Post;
@@ -18,11 +19,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class PostService {
 
     private final PostRepository postRepository;
@@ -38,4 +41,24 @@ public class PostService {
         return new ResponseDto(HttpStatus.CREATED);
     }
 
+    public ResponseDto editPost(HttpServletRequest request, EditPostDto dto) {
+        Member member = (Member) request.getAttribute("claim");
+        Post post = this.findPostById(dto.getId());
+        Long writerMemberId = post.getWriter().getId();
+        if (member.getPermission().equals("ADMIN") || member.getId().equals(writerMemberId)) {
+            Category category = this.findCategoryById(dto.getCategoryId());
+            post.edit(dto, category);
+            return new ResponseDto(HttpStatus.OK);
+        }
+
+        return new ResponseDto(HttpStatus.BAD_REQUEST);
+    }
+
+    public Category findCategoryById(Long id) {
+        return this.categoryDataRepository.findById(id).get();
+    }
+
+    public Post findPostById(Long id) {
+        return this.postJpaRepository.findById(id).get();
+    }
 }

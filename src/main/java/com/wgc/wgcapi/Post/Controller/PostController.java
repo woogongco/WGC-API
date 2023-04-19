@@ -6,6 +6,7 @@ by jeon-wangi
 
 import com.wgc.wgcapi.Common.Annotations.RequireToken;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
+import com.wgc.wgcapi.Post.DTO.EditPostDto;
 import com.wgc.wgcapi.Post.DTO.WritePostDto;
 import com.wgc.wgcapi.Post.Service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,11 @@ public class PostController {
     @RequireToken
     public ResponseDto writePost(@RequestBody WritePostDto dto, HttpServletRequest request) {
         return this.postService.writePost(request, dto);
+    }
+
+    @PostMapping("/edit")
+    @RequireToken
+    public ResponseDto editPost(@RequestBody EditPostDto dto, HttpServletRequest request) {
+        return this.postService.editPost(request, dto);
     }
 }

@@ -25,6 +25,7 @@ public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(value = { Exception.class })
     protected ResponseDto CommonExceptionHandler(Exception e, Object body, WebRequest request) {
+        e.printStackTrace();
         log.error("error message = {}", e.getMessage());
         return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, e.getCause() + "\n" + e.getMessage());
     }

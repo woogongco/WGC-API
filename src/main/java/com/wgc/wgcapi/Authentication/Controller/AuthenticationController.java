@@ -13,6 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/authentication")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 public class AuthenticationController {
 

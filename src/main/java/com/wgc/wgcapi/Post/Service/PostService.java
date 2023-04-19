@@ -33,7 +33,8 @@ public class PostService {
         Member member = (Member) request.getAttribute("claim");
         Category category = categoryDataRepository.findCategoryById(dto.getCategoryId());
         Post post = dto.asPostEntity(member, category);
-        Post newPost = postJpaRepository.save(post);
+        Post save = postJpaRepository.save(post);
+        log.info("new post  = {}", save);
         return new ResponseDto(HttpStatus.CREATED);
     }
 

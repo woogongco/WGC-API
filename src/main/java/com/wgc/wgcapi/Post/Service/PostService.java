@@ -33,7 +33,7 @@ public class PostService {
     private final CategoryDataRepository categoryDataRepository;
 
     public ResponseDto writePost(HttpServletRequest request, WritePostDto dto) {
-        Member member = (Member) request.getAttribute("claim");
+        Member member = this.getMemberInfo(request);
         Category category = categoryDataRepository.findCategoryById(dto.getCategoryId());
         Post post = dto.asPostEntity(member, category);
         Post save = postJpaRepository.save(post);
@@ -42,7 +42,7 @@ public class PostService {
     }
 
     public ResponseDto editPost(HttpServletRequest request, EditPostDto dto) {
-        Member member = (Member) request.getAttribute("claim");
+        Member member = this.getMemberInfo(request);
         Post post = this.findPostById(dto.getId());
         Long writerMemberId = post.getWriter().getId();
         if (member.getPermission().equals("ADMIN") || member.getId().equals(writerMemberId)) {
@@ -60,5 +60,20 @@ public class PostService {
 
     public Post findPostById(Long id) {
         return this.postJpaRepository.findById(id).get();
+    }
+
+    public ResponseDto deletePost(HttpServletRequest request, Long id) {
+        Member member = this.getMemberInfo(request);
+        Post post = this.findPostById(id);
+
+        Long writerId = post.getWriter().getId();
+        if (member.getId().equals(writerId) || member.getPermission().equals("ADMIN"))
+            post.delete();
+
+        return new ResponseDto(HttpStatus.BAD_REQUEST);
+    }
+
+    private Member getMemberInfo(HttpServletRequest request) {
+        return (Member) request.getAttribute("claim");
     }
 }

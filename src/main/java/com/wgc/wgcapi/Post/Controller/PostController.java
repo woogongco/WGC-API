@@ -33,4 +33,10 @@ public class PostController {
     public ResponseDto editPost(@RequestBody EditPostDto dto, HttpServletRequest request) {
         return this.postService.editPost(request, dto);
     }
+
+    @DeleteMapping("/edit/{id}")
+    @RequireToken
+    public ResponseDto deletePost(@PathVariable(name = "id") Long id, HttpServletRequest request) {
+        return this.postService.deletePost(request, id);
+    }
 }

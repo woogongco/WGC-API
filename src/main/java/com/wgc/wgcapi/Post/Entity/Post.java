@@ -59,6 +59,9 @@ public class Post {
     @LastModifiedDate
     private LocalDateTime lastUpdateDate;
 
+    @Column(name = "is_delete")
+    private Character isDelete;
+
     public Post(Member member, Category category, WritePostDto writePostDto) {
         this.writer = member;
         this.category = category;
@@ -70,5 +73,9 @@ public class Post {
         this.category = category;
         this.title = dto.getTitle();
         this.content = dto.getContent();
+    }
+
+    public void delete() {
+        this.isDelete = 'Y';
     }
 }

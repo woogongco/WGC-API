@@ -21,8 +21,10 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -90,4 +92,18 @@ public class PostService {
         return new ResponseDto(dto);
     }
 
+    public ResponseDto getPostList(Long categoryId) {
+        Category getCategory = this.findCategoryById(categoryId);
+
+        if (Objects.isNull(getCategory))
+            return new ResponseDto(HttpStatus.NOT_FOUND, "category is not found !");
+
+        List<ResponsePostDto> postList = getCategory.getPosts().stream()
+                .map(post -> new ResponsePostDto(post, post.getWriter()))
+                .collect(Collectors.toList());
+
+        return new ResponseDto(postList);
+
+
+    }
 }

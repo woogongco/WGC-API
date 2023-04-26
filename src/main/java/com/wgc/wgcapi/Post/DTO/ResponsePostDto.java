@@ -23,6 +23,8 @@ public class ResponsePostDto {
     private LocalDateTime lastModifiedDate;
     private MemberDto writer;
 
+
+
     public ResponsePostDto(Post post, Member writer) {
         this.id = post.getId();
         this.title = post.getTitle();
@@ -32,5 +34,6 @@ public class ResponsePostDto {
         this.registerDate = post.getRegisterDate();
         this.lastModifiedDate = post.getLastUpdateDate();
         this.writer = new MemberDto(writer);
+
     }
 }

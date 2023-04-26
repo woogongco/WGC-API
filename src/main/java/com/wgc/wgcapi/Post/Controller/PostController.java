@@ -44,4 +44,10 @@ public class PostController {
     public ResponseDto getPost(@PathVariable(name = "id") Long id) {
         return this.postService.getPost(id);
     }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseDto getPostList(@PathVariable(name = "categoryId") Long categoryId) {
+        return this.postService.getPostList(categoryId);
+    }
+
 }

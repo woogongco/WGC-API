@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,9 +44,9 @@ public class PostService {
         return new ResponseDto(HttpStatus.CREATED);
     }
 
-    public ResponseDto editPost(HttpServletRequest request, EditPostDto dto) {
+    public ResponseDto editPost(HttpServletRequest request, EditPostDto dto, Long id) {
         Member member = this.getMemberInfo(request);
-        Post post = this.findPostById(dto.getId());
+        Post post = this.findPostById(id);
         Long writerMemberId = post.getWriter().getId();
         if (member.getPermission().equals("ADMIN") || member.getId().equals(writerMemberId)) {
             Category category = this.findCategoryById(dto.getCategoryId());
@@ -79,7 +78,7 @@ public class PostService {
         return new ResponseDto(HttpStatus.BAD_REQUEST);
     }
 
-    private Member getMemberInfo(HttpServletRequest request) {
+    public Member getMemberInfo(HttpServletRequest request) {
         return (Member) request.getAttribute("claim");
     }
 

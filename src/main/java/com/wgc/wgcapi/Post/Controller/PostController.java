@@ -28,10 +28,10 @@ public class PostController {
         return this.postService.writePost(request, dto);
     }
 
-    @PostMapping("/edit")
+    @PatchMapping("/{id}")
     @RequireToken
-    public ResponseDto editPost(@RequestBody EditPostDto dto, HttpServletRequest request) {
-        return this.postService.editPost(request, dto);
+    public ResponseDto editPost(@RequestBody EditPostDto dto, HttpServletRequest request, @PathVariable(name = "id") Long id) {
+        return this.postService.editPost(request, dto, id);
     }
 
     @DeleteMapping("/{id}")

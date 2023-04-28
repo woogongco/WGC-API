@@ -8,10 +8,13 @@ by jeon-wangi
 import com.wgc.wgcapi.Post.Entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface CategoryDataRepository extends JpaRepository<Category, Long> {
 
     Category findCategoryById(Long id);
 
     Category findByName(String name);
 
+    List<Category> findAll();
 }

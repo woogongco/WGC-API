@@ -4,14 +4,19 @@ Created on 2023/04/19 11:35 PM In Intelli J IDEA
 by jeon-wangi
 */
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wgc.wgcapi.Member.DTO.MemberDto;
 import com.wgc.wgcapi.Member.Entity.Member;
+import com.wgc.wgcapi.Post.Entity.Category;
 import com.wgc.wgcapi.Post.Entity.Post;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponsePostDto {
 
     private Long id;
@@ -22,7 +27,7 @@ public class ResponsePostDto {
     private LocalDateTime registerDate;
     private LocalDateTime lastModifiedDate;
     private MemberDto writer;
-
+    private Category category;
 
 
     public ResponsePostDto(Post post, Member writer) {
@@ -34,6 +39,5 @@ public class ResponsePostDto {
         this.registerDate = post.getRegisterDate();
         this.lastModifiedDate = post.getLastUpdateDate();
         this.writer = new MemberDto(writer);
-
     }
 }

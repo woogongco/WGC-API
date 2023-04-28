@@ -22,6 +22,11 @@ public class PostController {
 
     private final PostService postService;
 
+    @GetMapping
+    public ResponseDto getPostsByCateogry(@RequestParam(name = "limit", defaultValue = "5") Long limit) {
+        return this.postService.getPostByCategory(limit);
+    }
+
     @PostMapping
     @RequireToken
     public ResponseDto writePost(@RequestBody WritePostDto dto, HttpServletRequest request) {

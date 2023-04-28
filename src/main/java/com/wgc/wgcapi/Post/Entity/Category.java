@@ -4,6 +4,8 @@ Created on 2023/04/12 11:55 PM In Intelli J IDEA
 by jeon-wangi
 */
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
@@ -11,6 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "category", catalog = "wgc")
+@Getter
 public class Category {
 
     @Id

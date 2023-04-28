@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,7 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CategoryService categoryService;
     private final PostDataJpaRepository postJpaRepository;
     private final CategoryDataRepository categoryDataRepository;
 
@@ -104,5 +107,16 @@ public class PostService {
         return new ResponseDto(postList);
 
 
+    }
+
+    public ResponseDto getPostByCategory(Long limit) {
+        List<Category> categories = categoryService.getCategory();
+        Map<String, Object> result = new HashMap<>();
+        categories.forEach(category -> {
+            List<ResponsePostDto> post = postRepository.findPostsByCategory(category.getId(), limit);
+            result.put(category.getKey(), post);
+        });
+
+        return new ResponseDto(result);
     }
 }

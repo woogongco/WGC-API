@@ -37,6 +37,7 @@ public class PostService {
     private final CategoryService categoryService;
     private final PostDataJpaRepository postJpaRepository;
     private final CategoryDataRepository categoryDataRepository;
+    private final PostLikeWriteService postLikeWriteService;
 
     public ResponseDto writePost(HttpServletRequest request, WritePostDto dto) {
         Member member = this.getMemberInfo(request);
@@ -119,4 +120,30 @@ public class PostService {
 
         return new ResponseDto(result);
     }
+
+    public ResponseDto likePost(HttpServletRequest request, Long id) {
+
+        Member getMember = this.getMemberInfo(request);
+        Post getPost = this.findPostById(id);
+
+        if(Objects.isNull(getPost))
+            return new ResponseDto(HttpStatus.NOT_FOUND, "post is not found !");
+
+        return postLikeWriteService.like(getMember, getPost);
+
+
+    }
+
+    public ResponseDto dislikePost(HttpServletRequest request, Long id) {
+        Member getMember = this.getMemberInfo(request);
+        Post getPost = this.findPostById(id);
+
+        if(Objects.isNull(getPost))
+            return new ResponseDto(HttpStatus.NOT_FOUND, "post is not found !");
+
+       return postLikeWriteService.dislike(getMember, getPost);
+
+    }
+
+
 }

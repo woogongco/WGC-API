@@ -6,6 +6,7 @@ by jeon-wangi
 
 import com.wgc.wgcapi.Member.DTO.MemberDto;
 import com.wgc.wgcapi.Post.Entity.Post;
+import com.wgc.wgcapi.Post.Entity.PostLike;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,6 +47,11 @@ public class Member {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "writer")
     private Set<Post> posts = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    private Set<PostLike> postLikes = new HashSet<>();
+
+
 
     public Member(String name, String mail, String password) {
         this.name = name;

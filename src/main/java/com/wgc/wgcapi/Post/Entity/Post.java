@@ -17,6 +17,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "post", catalog = "wgc")
@@ -38,6 +40,9 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+    private Set<PostLike> postLikes = new HashSet<>();
 
     @Column(name = "title")
     private String title;
@@ -78,4 +83,11 @@ public class Post {
     public void delete() {
         this.isDelete = 'Y';
     }
+
+    public void incrementLikeCount() { this.like++;}
+
+
+    public void decrementLikeCount() { this.like--;}
+
+
 }

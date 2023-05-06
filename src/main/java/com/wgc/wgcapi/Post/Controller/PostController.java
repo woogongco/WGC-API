@@ -54,5 +54,17 @@ public class PostController {
     public ResponseDto getPostList(@PathVariable(name = "categoryId") Long categoryId) {
         return this.postService.getPostList(categoryId);
     }
+    @PostMapping("/{id}/like")
+    @RequireToken
+    public ResponseDto likePost(@PathVariable(name = "id") Long id, HttpServletRequest request) {
+        return this.postService.likePost(request, id);
+    }
+
+    @PostMapping("/{id}/dislike")
+    @RequireToken
+    public ResponseDto dislikePost(@PathVariable(name = "id") Long id, HttpServletRequest request) {
+        return this.postService.dislikePost(request, id);
+    }
+
 
 }

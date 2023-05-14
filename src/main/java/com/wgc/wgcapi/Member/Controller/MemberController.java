@@ -4,12 +4,16 @@ Created on 2023/02/21 11:25 PM In Intelli J IDEA
 by jeon-wangi
 */
 
+import com.wgc.wgcapi.Common.Annotations.RequireToken;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
 import com.wgc.wgcapi.Member.DTO.SignInUserDto;
 import com.wgc.wgcapi.Member.DTO.SignUpUserDto;
 import com.wgc.wgcapi.Member.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/member")
@@ -27,5 +31,11 @@ public class MemberController {
     @PostMapping("/sign")
     public ResponseDto signIn(@RequestBody SignInUserDto dto) {
         return service.signIn(dto);
+    }
+
+    @PostMapping("/introduction")
+    @RequireToken
+    public ResponseDto modifyIntroduction(HttpServletRequest request, @RequestBody Map<String, String> param) {
+        return this.service.modifyIntroduction(request, param);
     }
 }

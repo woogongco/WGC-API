@@ -18,8 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -55,5 +57,21 @@ public class MemberService {
 
         String token = authenticationService.getAuthenticationToken(member);
         return new ResponseDto(token);
+    }
+
+    public ResponseDto modifyIntroduction(HttpServletRequest request, Map<String, String> param) {
+        Member member = getMemberInfo(request);
+        if (Objects.isNull(member))
+            return new ResponseDto(HttpStatus.BAD_REQUEST, "Invalid Member Information !");
+
+        Member findMember = memberRepository.findById(member.getId()).get();
+        findMember.updateIntroduction(param);
+
+        HttpStatus status = HttpStatus.CREATED;
+        return new ResponseDto(status, status.getReasonPhrase());
+    }
+
+    private Member getMemberInfo(HttpServletRequest request) {
+        return (Member) request.getAttribute("claim");
     }
 }

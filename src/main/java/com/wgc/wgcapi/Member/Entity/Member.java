@@ -16,6 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -35,8 +36,17 @@ public class Member {
     @Column(name = "mail")
     private String mail;
 
+    @Column(name = "skil")
+    private String skil;
+
+    @Column(name = "introduction")
+    private String introduction;
+
     @Column(name = "password")
     private String password;
+
+    @Column(name = "color")
+    private String color;
 
     @Column(name = "permission")
     private String permission = "MEMBER";
@@ -52,7 +62,6 @@ public class Member {
     private Set<PostLike> postLikes = new HashSet<>();
 
 
-
     public Member(String name, String mail, String password) {
         this.name = name;
         this.mail = mail;
@@ -61,5 +70,11 @@ public class Member {
 
     public MemberDto asDto() {
         return new MemberDto(this);
+    }
+
+    public void updateIntroduction(Map<String, String> param) {
+        this.skil = param.get("skill");
+        this.introduction = param.get("introduction");
+        this.color = param.get("color");
     }
 }

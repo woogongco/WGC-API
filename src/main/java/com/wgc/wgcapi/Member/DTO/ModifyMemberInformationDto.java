@@ -14,5 +14,6 @@ public class ModifyMemberInformationDto {
     private String color;
     private String introduction;
     private String password;
+    private String github;
 
 }

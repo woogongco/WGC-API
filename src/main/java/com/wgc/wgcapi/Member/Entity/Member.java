@@ -49,6 +49,9 @@ public class Member {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "github")
+    private String github;
+
     @Column(name = "color")
     private String color;
 
@@ -88,6 +91,7 @@ public class Member {
         this.color = checkIsPresent(this.color, dto.getColor());
         this.introduction = checkIsPresent(this.introduction, dto.getIntroduction());
         this.password = checkIsPresent(this.password, EncryptUtils.encrypt(dto.getColor()));
+        this.github = checkIsPresent(this.github, dto.getGithub());
     }
 
     private String checkIsPresent(String original, String input) {

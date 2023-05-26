@@ -11,7 +11,6 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MemberDto {
 
     private Long id;
@@ -20,6 +19,7 @@ public class MemberDto {
     private String password;
     private String permission;
     private String skil;
+    private String github;
     private String introduction;
     private String color;
     private LocalDateTime registerDateTime;
@@ -32,5 +32,6 @@ public class MemberDto {
         this.skil = member.getSkil();
         this.introduction = member.getIntroduction();
         this.color = member.getColor();
+        this.github = member.getGithub();
     }
 }

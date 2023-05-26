@@ -46,7 +46,7 @@ public class MemberController {
         return this.service.getMyInformation(request);
     }
 
-    @PostMapping("/member/information")
+    @PostMapping("/information")
     @RequireToken
     public ResponseDto modifyInformation(HttpServletRequest request, @RequestBody ModifyMemberInformationDto dto) {
         return this.service.modifyInformation(request, dto);

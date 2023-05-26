@@ -8,6 +8,7 @@ import com.wgc.wgcapi.Authentication.Service.AuthenticationService;
 import com.wgc.wgcapi.Authentication.Service.JwtService;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
 import com.wgc.wgcapi.Common.Utils.EncryptUtils;
+import com.wgc.wgcapi.Member.DTO.ModifyMemberInformationDto;
 import com.wgc.wgcapi.Member.DTO.SignInUserDto;
 import com.wgc.wgcapi.Member.DTO.SignUpUserDto;
 import com.wgc.wgcapi.Member.Entity.Member;
@@ -73,5 +74,25 @@ public class MemberService {
 
     private Member getMemberInfo(HttpServletRequest request) {
         return (Member) request.getAttribute("claim");
+    }
+
+    public ResponseDto getMyInformation(HttpServletRequest request) {
+        Member myInformation = this.getMemberInfo(request);
+        if (Objects.isNull(myInformation))
+            return new ResponseDto(HttpStatus.NOT_FOUND, "Information not found !");
+
+        return new ResponseDto(HttpStatus.OK, myInformation.asDto());
+    }
+
+    public ResponseDto modifyInformation(HttpServletRequest request, ModifyMemberInformationDto dto) {
+        try {
+            Member member = this.getMemberInfo(request);
+            Member findMember = memberRepository.findById(member.getId()).get();
+            findMember.updateInformation(dto);
+        } catch (Exception e) {
+            log.error("modifyInformation error ! {}", e.getMessage());
+            return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, e);
+        }
+        return new ResponseDto(HttpStatus.OK);
     }
 }

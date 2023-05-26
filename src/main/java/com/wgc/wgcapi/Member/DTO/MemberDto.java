@@ -19,6 +19,9 @@ public class MemberDto {
     private String mail;
     private String password;
     private String permission;
+    private String skil;
+    private String introduction;
+    private String color;
     private LocalDateTime registerDateTime;
 
     public MemberDto(Member member) {
@@ -26,5 +29,8 @@ public class MemberDto {
         this.name = member.getName();
         this.mail = member.getMail();
         this.registerDateTime = member.getRegisterDateTime();
+        this.skil = member.getSkil();
+        this.introduction = member.getIntroduction();
+        this.color = member.getColor();
     }
 }

@@ -6,6 +6,7 @@ by jeon-wangi
 
 import com.wgc.wgcapi.Common.Annotations.RequireToken;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
+import com.wgc.wgcapi.Member.DTO.ModifyMemberInformationDto;
 import com.wgc.wgcapi.Member.DTO.SignInUserDto;
 import com.wgc.wgcapi.Member.DTO.SignUpUserDto;
 import com.wgc.wgcapi.Member.Service.MemberService;
@@ -37,5 +38,17 @@ public class MemberController {
     @RequireToken
     public ResponseDto modifyIntroduction(HttpServletRequest request, @RequestBody Map<String, String> param) {
         return this.service.modifyIntroduction(request, param);
+    }
+
+    @GetMapping("/my-info")
+    @RequireToken
+    public ResponseDto getMyInformation(HttpServletRequest request) {
+        return this.service.getMyInformation(request);
+    }
+
+    @PostMapping("/member/information")
+    @RequireToken
+    public ResponseDto modifyInformation(HttpServletRequest request, @RequestBody ModifyMemberInformationDto dto) {
+        return this.service.modifyInformation(request, dto);
     }
 }

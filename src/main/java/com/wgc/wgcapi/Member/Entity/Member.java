@@ -4,12 +4,15 @@ Created on 2023/03/09 10:27 PM In Intelli J IDEA
 by jeon-wangi
 */
 
+import com.wgc.wgcapi.Common.Utils.EncryptUtils;
 import com.wgc.wgcapi.Member.DTO.MemberDto;
+import com.wgc.wgcapi.Member.DTO.ModifyMemberInformationDto;
 import com.wgc.wgcapi.Post.Entity.Post;
 import com.wgc.wgcapi.Post.Entity.PostLike;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -23,6 +26,7 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@DynamicUpdate
 @EntityListeners(AuditingEntityListener.class)
 public class Member {
 
@@ -76,5 +80,20 @@ public class Member {
         this.skil = param.get("skill");
         this.introduction = param.get("introduction");
         this.color = param.get("color");
+    }
+
+    public void updateInformation(ModifyMemberInformationDto dto) {
+        this.name = checkIsPresent(this.name, dto.getName());
+        this.skil = checkIsPresent(this.skil, dto.getSkill());
+        this.color = checkIsPresent(this.color, dto.getColor());
+        this.introduction = checkIsPresent(this.introduction, dto.getIntroduction());
+        this.password = checkIsPresent(this.password, EncryptUtils.encrypt(dto.getColor()));
+    }
+
+    private String checkIsPresent(String original, String input) {
+        if (input == null || input.isEmpty() || input.isBlank())
+            return original;
+
+        return input;
     }
 }

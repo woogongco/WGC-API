@@ -88,6 +88,4 @@ public class Post {
 
 
     public void decrementLikeCount() { this.like--;}
-
-
 }

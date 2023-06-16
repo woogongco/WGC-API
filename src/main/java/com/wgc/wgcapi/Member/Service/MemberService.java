@@ -52,6 +52,7 @@ public class MemberService {
 
     public ResponseDto signIn(SignInUserDto dto) {
         String encryptPassword = EncryptUtils.encrypt(dto.getPassword());
+        log.info("id = {} ,before pw = {} ,pw = {}", dto.getMail(), dto.getPassword(), encryptPassword);
         Member member = memberRepository.findMemberByMailIsAndPasswordIs(dto.getMail(), encryptPassword);
         if (Objects.isNull(member))
             return new ResponseDto(HttpStatus.BAD_REQUEST, "User is not found !");

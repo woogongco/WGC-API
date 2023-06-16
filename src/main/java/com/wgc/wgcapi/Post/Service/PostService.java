@@ -6,6 +6,7 @@ by jeon-wangi
 
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
 import com.wgc.wgcapi.Member.Entity.Member;
+import com.wgc.wgcapi.Post.DTO.CategoryDto;
 import com.wgc.wgcapi.Post.DTO.EditPostDto;
 import com.wgc.wgcapi.Post.DTO.ResponsePostDto;
 import com.wgc.wgcapi.Post.DTO.WritePostDto;
@@ -106,8 +107,6 @@ public class PostService {
                 .collect(Collectors.toList());
 
         return new ResponseDto(postList);
-
-
     }
 
     public ResponseDto getPostByCategory(Long limit) {
@@ -146,6 +145,10 @@ public class PostService {
     }
 
     public ResponseDto getCategories() {
-        return new ResponseDto(categoryService.getCategory());
+        return new ResponseDto(categoryService
+                .getCategory()
+                .stream()
+                .map(CategoryDto::new)
+        );
     }
 }

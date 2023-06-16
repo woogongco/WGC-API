@@ -5,9 +5,9 @@ by jeon-wangi
 */
 
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +28,6 @@ public class Category {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     private Set<Post> posts = new HashSet<>();
-
 
     public Set<Post> getPosts() {
         return posts;

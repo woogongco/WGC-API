@@ -50,10 +50,16 @@ public class PostController {
         return this.postService.getPost(id);
     }
 
+    @GetMapping("/category")
+    public ResponseDto getCategories() {
+        return this.postService.getCategories();
+    }
+
     @GetMapping("/category/{categoryId}")
     public ResponseDto getPostList(@PathVariable(name = "categoryId") Long categoryId) {
         return this.postService.getPostList(categoryId);
     }
+
     @PostMapping("/{id}/like")
     @RequireToken
     public ResponseDto likePost(@PathVariable(name = "id") Long id, HttpServletRequest request) {

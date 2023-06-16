@@ -126,7 +126,7 @@ public class PostService {
         Member getMember = this.getMemberInfo(request);
         Post getPost = this.findPostById(id);
 
-        if(Objects.isNull(getPost))
+        if (Objects.isNull(getPost))
             return new ResponseDto(HttpStatus.NOT_FOUND, "post is not found !");
 
         return postLikeWriteService.like(getMember, getPost);
@@ -138,12 +138,14 @@ public class PostService {
         Member getMember = this.getMemberInfo(request);
         Post getPost = this.findPostById(id);
 
-        if(Objects.isNull(getPost))
+        if (Objects.isNull(getPost))
             return new ResponseDto(HttpStatus.NOT_FOUND, "post is not found !");
 
-       return postLikeWriteService.dislike(getMember, getPost);
+        return postLikeWriteService.dislike(getMember, getPost);
 
     }
 
-
+    public ResponseDto getCategories() {
+        return new ResponseDto(categoryService.getCategory());
+    }
 }

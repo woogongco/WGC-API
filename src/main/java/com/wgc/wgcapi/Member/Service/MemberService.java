@@ -73,7 +73,7 @@ public class MemberService {
         return new ResponseDto(status, status.getReasonPhrase());
     }
 
-    private Member getMemberInfo(HttpServletRequest request) {
+    public Member getMemberInfo(HttpServletRequest request) {
         return (Member) request.getAttribute("claim");
     }
 
@@ -95,5 +95,9 @@ public class MemberService {
             return new ResponseDto(HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
         return new ResponseDto(HttpStatus.OK);
+    }
+
+    public Member findById(Long id) {
+        return memberRepositoryImpl.find(id);
     }
 }

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class ExceptionHandlerAdvice {
 
-    @ExceptionHandler(value = { IllegalAccessException.class })
+    @ExceptionHandler(value = { IllegalAccessException.class, IllegalArgumentException.class })
     protected ResponseDto illegalAccessExceptionHandler(IllegalAccessException e, Object body, WebRequest request) {
         return new ResponseDto(HttpStatus.BAD_REQUEST, e);
     }

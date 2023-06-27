@@ -60,16 +60,45 @@ public class NeighborRepository {
         }
     }
 
-    public Neighbor getNeighborStatus(Long requestUserId, Long targetUserId) {
+    public Neighbor getNeighborStatus(Long currentUserId, Long targetUserId) {
         return query
                 .selectFrom(neighbor)
                 .where(
-                        neighbor.requestMember.id.eq(requestUserId)
-                                .or(neighbor.requestMember.id.eq(targetUserId))
-                                .or(neighbor.acceptMember.id.eq(requestUserId))
-                                .or(neighbor.acceptMember.id.eq(targetUserId))
+                        neighbor.acceptMember.id.eq(currentUserId)
+                                .and(neighbor.requestMember.id.eq(targetUserId))
                                 .and(neighbor.isDelete.eq('N'))
                 )
                 .fetchFirst();
+    }
+
+    public Neighbor getNeighborByRequestUserId(Long requestUserId, Long acceptUserId) {
+        try {
+            return query
+                    .selectFrom(neighbor)
+                    .where(
+                            neighbor.requestMember.id.eq(requestUserId)
+                                    .and(neighbor.acceptMember.id.eq(acceptUserId))
+                            , neighbor.isDelete.eq('N')
+                    )
+                    .fetchFirst();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public Neighbor getNeighbor(Long currentUser, Long targetUser) {
+        try {
+            return query
+                    .selectFrom(neighbor)
+                    .where(
+                            neighbor.requestMember.id.eq(currentUser)
+                                    .or(neighbor.acceptMember.id.eq(currentUser))
+                                    .or(neighbor.requestMember.id.eq(targetUser))
+                                    .or(neighbor.acceptMember.id.eq(targetUser))
+                    )
+                    .fetchFirst();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

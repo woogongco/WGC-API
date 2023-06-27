@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -40,6 +41,10 @@ public class Neighbor {
     @Column(name = "request_dt")
     @CreatedDate
     private LocalDateTime requestDateTime;
+
+    @Column(name = "last_modify_date")
+    @LastModifiedDate
+    private LocalDateTime lastModifiedDate;
 
     @Column(name = "is_accept")
     private Character isAccept = 'R';

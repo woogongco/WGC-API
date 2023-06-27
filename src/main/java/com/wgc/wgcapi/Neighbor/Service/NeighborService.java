@@ -43,6 +43,10 @@ public class NeighborService {
         if (Objects.isNull(accepter))
             return new ResponseDto(HttpStatus.NOT_FOUND, "Member id " + id + " is not found !");
 
+        Neighbor neighborRequest = repository.getNeighborByRequestUserId(requester.getId(), id);
+        if (Objects.nonNull(neighborRequest))
+            return new ResponseDto(HttpStatus.NOT_MODIFIED, "Request Already Exists !");
+
         neighborDataRepository.save(new Neighbor(requester, accepter));
         return new ResponseDto(HttpStatus.CREATED, "Request success !");
     }
@@ -50,14 +54,17 @@ public class NeighborService {
     public ResponseDto changeNeighborStatus(HttpServletRequest request, String action, Long id) {
         Member member = memberService.getMemberInfo(request);
         NeighborStatus status = getNeighborStatusByString(action);
+
+        if (status.equals(NeighborStatus.DELETE)) {
+            Neighbor neighbor = repository.getNeighbor(member.getId(), id);
+            neighbor.deleteNeighbor();
+            return new ResponseDto(HttpStatus.ACCEPTED);
+        }
+
         Neighbor neighbor = repository.getNeighborStatus(member.getId(), id);
         if (Objects.isNull(neighbor))
             return new ResponseDto(HttpStatus.NOT_FOUND, "Neighbor request Not Found !");
 
-        if (status.equals(NeighborStatus.DELETE)) {
-            neighbor.deleteNeighbor();
-            return new ResponseDto(HttpStatus.ACCEPTED);
-        }
 
         neighbor.updateRequestStatus(status);
 

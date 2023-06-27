@@ -31,7 +31,7 @@ public class ExceptionHandlerAdvice {
     }
 
     @ExceptionHandler(value = { NoHandlerFoundException.class })
-    protected ResponseDto noHandlerFoundException(Exception e, Object body, WebRequest request, HttpServletRequest servletRequest) {
+    protected ResponseDto noHandlerFoundException(NoHandlerFoundException e, Object body, WebRequest request, HttpServletRequest servletRequest) {
         String uri = servletRequest.getRequestURI();
         String method = servletRequest.getMethod();
         return new ResponseDto(HttpStatus.BAD_REQUEST, method + " " + uri + " is not found !");

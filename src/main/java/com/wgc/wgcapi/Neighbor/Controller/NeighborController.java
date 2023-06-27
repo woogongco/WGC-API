@@ -31,7 +31,7 @@ public class NeighborController {
     }
 
     @RequireToken
-    @PostMapping("/action/{action}/{id}")
+    @PostMapping("/{action}/{id}")
     public ResponseDto changeNeighborStatus(HttpServletRequest request, @PathVariable("action") String action, @PathVariable("id") Long id) {
         return neighborService.changeNeighborStatus(request, action, id);
     }

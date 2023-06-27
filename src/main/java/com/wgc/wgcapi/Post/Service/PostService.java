@@ -151,4 +151,8 @@ public class PostService {
                 .map(CategoryDto::new)
         );
     }
+
+    public List<Post> getPostByUserId(Member member) {
+        return postJpaRepository.findPostsByWriterIdAndIsDeleteIsOrderByRegisterDateDesc(member.getId(), 'N');
+    }
 }

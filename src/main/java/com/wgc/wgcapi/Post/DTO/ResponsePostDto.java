@@ -40,4 +40,14 @@ public class ResponsePostDto {
         this.lastModifiedDate = post.getLastUpdateDate();
         this.writer = new MemberDto(writer);
     }
+
+    public ResponsePostDto(Post post) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.like = post.getLike();
+        this.view = post.getView();
+        this.registerDate = post.getRegisterDate();
+        this.lastModifiedDate = post.getLastUpdateDate();
+    }
 }

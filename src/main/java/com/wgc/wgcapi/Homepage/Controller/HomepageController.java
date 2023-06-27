@@ -4,12 +4,23 @@ Created on 2023/02/21 11:24 PM In Intelli J IDEA
 by jeon-wangi
 */
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.wgc.wgcapi.Common.DTO.ResponseDto;
+import com.wgc.wgcapi.Homepage.Service.HomepageService;
+import com.wgc.wgcapi.Member.Entity.Member;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/homepage")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequiredArgsConstructor
 public class HomepageController {
+
+    private final HomepageService homepageService;
+
+    @GetMapping("/post/{userId}")
+    public ResponseDto getMiniHompagePosts(@PathVariable("userId") Member member) {
+        return homepageService.getPostByUser(member);
+    }
+
 }

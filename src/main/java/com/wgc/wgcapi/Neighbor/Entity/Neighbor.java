@@ -7,6 +7,7 @@ by jeon-wangi
 import com.wgc.wgcapi.Member.Entity.Member;
 import com.wgc.wgcapi.Neighbor.Enums.NeighborStatus;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 @DynamicUpdate
 @AllArgsConstructor
 @Table(name = "neighbor", catalog = "wgc")
+@Getter
 public class Neighbor {
 
     @Id
@@ -51,6 +53,11 @@ public class Neighbor {
     }
 
     public void updateRequestStatus(NeighborStatus status) {
-        this.isAccept = status.vale();
+        this.isAccept = status.getValue();
+    }
+
+    public void deleteNeighbor() {
+        this.isDelete = 'Y';
+        this.isAccept = 'N';
     }
 }

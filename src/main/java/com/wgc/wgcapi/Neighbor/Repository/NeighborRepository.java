@@ -59,4 +59,17 @@ public class NeighborRepository {
             return new ArrayList<>();
         }
     }
+
+    public Neighbor getNeighborStatus(Long requestUserId, Long targetUserId) {
+        return query
+                .selectFrom(neighbor)
+                .where(
+                        neighbor.requestMember.id.eq(requestUserId)
+                                .or(neighbor.requestMember.id.eq(targetUserId))
+                                .or(neighbor.acceptMember.id.eq(requestUserId))
+                                .or(neighbor.acceptMember.id.eq(targetUserId))
+                                .and(neighbor.isDelete.eq('N'))
+                )
+                .fetchFirst();
+    }
 }

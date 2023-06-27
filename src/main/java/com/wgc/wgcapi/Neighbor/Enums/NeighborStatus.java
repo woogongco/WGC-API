@@ -6,17 +6,15 @@ by jeon-wangi
 
 public enum NeighborStatus {
 
-    ACCEPT('Y'),
-    REFUSE('N'),
-    HOLD('R');
+    ACCEPT('Y'), REFUSE('N'), DELETE('D'), HOLD('R');
 
-    private final Character vale;
+    private final Character value;
 
-    NeighborStatus(Character vale) {
-        this.vale = vale;
+    NeighborStatus(Character value) {
+        this.value = value;
     }
 
-    public Character vale() {
-        return vale;
+    public Character getValue() {
+        return value;
     }
 }

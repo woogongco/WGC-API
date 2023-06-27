@@ -50,9 +50,14 @@ public class NeighborService {
     public ResponseDto changeNeighborStatus(HttpServletRequest request, String action, Long id) {
         Member member = memberService.getMemberInfo(request);
         NeighborStatus status = getNeighborStatusByString(action);
-        Neighbor neighbor = neighborDataRepository.findByRequestMemberIdAndAcceptMemberIdAndIsDelete(member.getId(), id, 'N');
+        Neighbor neighbor = repository.getNeighborStatus(member.getId(), id);
         if (Objects.isNull(neighbor))
             return new ResponseDto(HttpStatus.NOT_FOUND, "Neighbor request Not Found !");
+
+        if (status.equals(NeighborStatus.DELETE)) {
+            neighbor.deleteNeighbor();
+            return new ResponseDto(HttpStatus.ACCEPTED);
+        }
 
         neighbor.updateRequestStatus(status);
 
@@ -67,6 +72,8 @@ public class NeighborService {
                 return NeighborStatus.REFUSE;
             case "hold":
                 return NeighborStatus.HOLD;
+            case "remove":
+                return NeighborStatus.DELETE;
             default:
                 throw new IllegalArgumentException("Unknown status type for " + action);
         }

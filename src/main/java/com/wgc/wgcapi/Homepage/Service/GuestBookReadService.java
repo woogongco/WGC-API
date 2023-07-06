@@ -5,6 +5,8 @@ by jeon-wangi
 */
 
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
+import com.wgc.wgcapi.Homepage.Entity.GuestBook;
+import com.wgc.wgcapi.Homepage.Repository.GuestBookRepository;
 import com.wgc.wgcapi.Member.Entity.Member;
 import com.wgc.wgcapi.Post.DTO.ResponsePostDto;
 import com.wgc.wgcapi.Post.Service.PostService;
@@ -20,9 +22,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class HomepageService {
+public class GuestBookReadService {
 
     private final PostService postService;
+    private final GuestBookRepository guestBookRepository;
+
+
+    //todo 추후 수정 예정
 
     public ResponseDto getPostByUser(Member member) {
         List<ResponsePostDto> posts = postService.getPostByUserId(member)
@@ -31,5 +37,9 @@ public class HomepageService {
                 .collect(Collectors.toList());
 
         return new ResponseDto(posts);
+    }
+
+    public GuestBook getGuestbooks(Long id) {
+        return guestBookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + id));
     }
 }

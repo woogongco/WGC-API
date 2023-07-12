@@ -27,12 +27,11 @@ public class GuestBookWriteService {
 
     private final GuestBookRepository guestBookRepository;
 
-        public GuestBook createGuestBooks(GuestBook guestBook) {
-            return Optional.ofNullable(guestBook)
-                    .map(it ->
-                            guestBookRepository.save(guestBook))
-                    .orElseThrow(() -> new APIException(new ResponseDto(HttpStatus.BAD_REQUEST, "Invalid Member Information !")));
-        }
+    public GuestBook createGuestBooks(GuestBook guestBook) {
+        return Optional.ofNullable(guestBook)
+                .map(it -> guestBookRepository.save(guestBook))
+                .orElseThrow(() -> new APIException(new ResponseDto(HttpStatus.BAD_REQUEST, "GuestBook creation failed. The provided GuestBook object is null.")));
+    }
 
     public List<GuestBook> searchGuestBooks(Member writerMember, Long limit) {
         return guestBookRepository.findNonDeletedByWriterMember(writerMember, limit);
@@ -49,7 +48,7 @@ public class GuestBookWriteService {
                             .build();
                     return guestBookRepository.save(updatedGuestBook);
                 })
-                .orElseThrow(() -> new APIException(new ResponseDto(HttpStatus.BAD_REQUEST, "Invalid Member Information !")));
+                .orElseThrow(() -> new APIException(new ResponseDto(HttpStatus.BAD_REQUEST, "Modification failed. GuestBook with the provided ID not found.")));
     }
 
     public void deleteGuestBooks(GuestBook getGuestBook) {

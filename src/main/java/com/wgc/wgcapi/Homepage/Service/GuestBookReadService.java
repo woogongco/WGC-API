@@ -5,6 +5,7 @@ by jeon-wangi
 */
 
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
+import com.wgc.wgcapi.Common.Exception.APIException;
 import com.wgc.wgcapi.Homepage.Entity.GuestBook;
 import com.wgc.wgcapi.Homepage.Repository.GuestBookRepository;
 import com.wgc.wgcapi.Member.Entity.Member;
@@ -12,6 +13,7 @@ import com.wgc.wgcapi.Post.DTO.ResponsePostDto;
 import com.wgc.wgcapi.Post.Service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -40,6 +42,6 @@ public class GuestBookReadService {
     }
 
     public GuestBook getGuestbooks(Long id) {
-        return guestBookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + id));
+        return guestBookRepository.findById(id).orElseThrow(() -> new APIException(new ResponseDto(HttpStatus.BAD_REQUEST, "No GuestBook found with the provided ID: " + id)));
     }
 }

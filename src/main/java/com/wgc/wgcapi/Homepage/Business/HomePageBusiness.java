@@ -9,6 +9,7 @@ import com.wgc.wgcapi.Homepage.Entity.GuestBook;
 import com.wgc.wgcapi.Homepage.Service.GuestBookReadService;
 import com.wgc.wgcapi.Homepage.Service.GuestBookWriteService;
 import com.wgc.wgcapi.Member.Entity.Member;
+import com.wgc.wgcapi.Member.Service.MemberService;
 import com.wgc.wgcapi.Post.Service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class HomePageBusiness {
 
     private final GuestBookConverter homepageConverter;
 
-    private final PostService memberService;
+    private final MemberService memberService;
     /**
      * 방명록 생성
      */
@@ -72,7 +73,8 @@ public class HomePageBusiness {
 
     private static void checkWriter(Member writerMember, GuestBook guestBook) {
         if(!writerMember.getId().equals(guestBook.getWriterMember().getId())) {
-            throw new APIException(new ResponseDto(HttpStatus.BAD_REQUEST, "Invalid Member Information !"));
+            throw new APIException(new ResponseDto(HttpStatus.BAD_REQUEST,
+                "WriterMember ID does not match with GuestBook's writerMember ID."));
         }
 }
     }

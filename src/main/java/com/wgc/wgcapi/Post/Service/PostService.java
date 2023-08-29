@@ -17,6 +17,8 @@ import com.wgc.wgcapi.Post.Repository.PostDataJpaRepository;
 import com.wgc.wgcapi.Post.Repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -117,6 +119,8 @@ public class PostService {
             result.put(category.getKey(), post);
         });
 
+        List<Post> popularArticles = postJpaRepository.findAllByIsDeleteIsOrderByLikeDesc('N', PageRequest.of(0, 10));
+        result.put("popular", popularArticles);
         return new ResponseDto(result);
     }
 

@@ -6,6 +6,7 @@ by jeon-wangi
 
 import com.wgc.wgcapi.Post.Entity.Category;
 import com.wgc.wgcapi.Post.Entity.Post;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
@@ -18,4 +19,6 @@ public interface PostDataJpaRepository extends JpaRepository<Post, Long>, CrudRe
     List<Post> findTop5ByCategoryIsAndIsDeleteEqualsOrderByIdDesc(Category category, Character isDelete);
 
     List<Post> findPostsByWriterIdAndIsDeleteIsOrderByRegisterDateDesc(Long writerId, Character isDelete);
+
+    List<Post> findAllByIsDeleteIsOrderByLikeDesc(Character isDelete, Pageable pageable);
 }

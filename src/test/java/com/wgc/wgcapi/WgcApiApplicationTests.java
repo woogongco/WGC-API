@@ -9,6 +9,7 @@ import javax.print.DocFlavor;
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,5 +25,4 @@ class WgcApiApplicationTests {
         String result = DatatypeConverter.printHexBinary(md.digest());
         Assertions.assertEquals("098F6BCD4621D373CADE4E832627B4F6", result);
     }
-
 }

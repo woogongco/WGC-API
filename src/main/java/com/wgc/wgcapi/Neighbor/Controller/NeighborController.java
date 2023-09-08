@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/neighbor")
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class NeighborController {
 
     private final NeighborService neighborService;

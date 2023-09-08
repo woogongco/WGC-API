@@ -12,6 +12,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,28 +35,23 @@ import java.util.UUID;
 @Slf4j
 public class FileUploadService {
 
-    private final AmazonS3 client;
+    private AmazonS3 client;
 
-    @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    @Value("${cloud.aws.credentials.accessKey}")
-    private String accessKey;
-
-    @Value("${cloud.aws.credentials.secretKey}")
-    private String secretKey;
-
-    @Value("${cloud.aws.region}")
-    private String region;
-
-    public FileUploadService() {
-        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
+    public FileUploadService(@Value("${cloud.aws.s3.bucket}") String bucket,
+                             @Value("${cloud.aws.credentials.accessKey}") String accessKey,
+                             @Value("${cloud.aws.credentials.secretKey}") String secretKey,
+                             @Value("${cloud.aws.credentials.region}") String region) {
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
 
         this.client = AmazonS3ClientBuilder
                 .standard()
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                .withRegion(this.region)
+                .withRegion(region)
                 .build();
+
+        this.bucket = bucket;
     }
 
     public ResponseDto upload(HttpServletRequest request, HttpServletResponse response, MultipartFile file) {

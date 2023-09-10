@@ -4,23 +4,16 @@ Created on 2023/08/21 9:26 PM In Intelli J IDEA
 by jeon-wangi
 */
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -31,27 +24,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class FileUploadService {
 
-    private AmazonS3 client;
+    private final AmazonS3 client;
 
-    private String bucket;
+    private final String bucket = "wgc-media";
 
-    public FileUploadService(@Value("${cloud.aws.s3.bucket}") String bucket,
-                             @Value("${cloud.aws.credentials.accessKey}") String accessKey,
-                             @Value("${cloud.aws.credentials.secretKey}") String secretKey,
-                             @Value("${cloud.aws.credentials.region}") String region) {
-        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
-
-        this.client = AmazonS3ClientBuilder
-                .standard()
-                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
-                .withRegion(region)
-                .build();
-
-        this.bucket = bucket;
+    public FileUploadService(AmazonS3 client) {
+        this.client = client;
     }
 
     public ResponseDto upload(HttpServletRequest request, HttpServletResponse response, MultipartFile file) {
@@ -67,8 +48,8 @@ public class FileUploadService {
         String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
         String filePath = this.filePath() + fileName;
         PutObjectRequest requestObject = getRequestObject(filePath, file);
-        client.putObject(requestObject);
-        return client.getUrl(bucket, filePath).toString();
+        this.client.putObject(requestObject);
+        return this.client.getUrl(bucket, filePath).toString();
     }
 
     private PutObjectRequest getRequestObject(String path, MultipartFile file) throws IOException {

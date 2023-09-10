@@ -33,8 +33,8 @@ public class GuestBookWriteService {
                 .orElseThrow(() -> new APIException(new ResponseDto(HttpStatus.BAD_REQUEST, "GuestBook creation failed. The provided GuestBook object is null.")));
     }
 
-    public List<GuestBook> searchGuestBooks(Member writerMember, Long limit) {
-        return guestBookRepository.findNonDeletedByWriterMember(writerMember, limit);
+    public List<GuestBook> searchGuestBooks(Long memberId, Long limit) {
+        return guestBookRepository.findNonDeletedByWriterMemberId(memberId, limit);
     }
 
 
@@ -42,7 +42,7 @@ public class GuestBookWriteService {
         return guestBookRepository.findById(id)
                 .map(existingGuestBook -> {
                     GuestBook updatedGuestBook = GuestBook.builder()
-                            .GuestBookId(existingGuestBook.getGuestBookId())
+                            .id(existingGuestBook.getId())
                             .content(updateGuestBook.getContent())
                             .writerMember(existingGuestBook.getWriterMember())
                             .build();

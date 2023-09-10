@@ -30,8 +30,6 @@ public class GuestBookReadService {
     private final GuestBookRepository guestBookRepository;
 
 
-    //todo 추후 수정 예정
-
     public ResponseDto getPostByUser(Member member) {
         List<ResponsePostDto> posts = postService.getPostByUserId(member)
                 .stream()

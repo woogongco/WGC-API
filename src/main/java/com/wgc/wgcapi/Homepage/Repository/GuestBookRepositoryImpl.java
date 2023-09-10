@@ -21,16 +21,18 @@ public class GuestBookRepositoryImpl implements CustomGuestBookRepository {
     private final JPAQueryFactory query;
     private final QGuestBook guestBook = QGuestBook.guestBook;
 
-    public List<GuestBook> findNonDeletedByWriterMember(Member writerMember, Long limit) {
+
+
+    @Override
+    public List<GuestBook> findNonDeletedByWriterMemberId(Long writerMemberId, Long limit) {
         return query
                 .selectFrom(guestBook)
                 .where(
-                        guestBook.writerMember.eq(writerMember),
+                        guestBook.writerMember.id.eq(writerMemberId),
                         guestBook.isDelete.eq("N")
                 )
-                .orderBy(guestBook.GuestBookId.desc())
+                .orderBy(guestBook.id.desc())
                 .limit(limit)
                 .fetch();
-
     }
 }

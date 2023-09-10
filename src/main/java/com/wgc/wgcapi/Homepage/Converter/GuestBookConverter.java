@@ -3,15 +3,13 @@ package com.wgc.wgcapi.Homepage.Converter;
 import com.wgc.wgcapi.Common.Annotations.Converter;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
 import com.wgc.wgcapi.Common.Exception.APIException;
-import com.wgc.wgcapi.Homepage.Controller.request.GuestBookCreateRequest;
+import com.wgc.wgcapi.Homepage.DTO.GuestBookCreateRequest;
 import com.wgc.wgcapi.Homepage.DTO.GuestBookResponse;
 import com.wgc.wgcapi.Homepage.Entity.GuestBook;
 import com.wgc.wgcapi.Member.Entity.Member;
-import com.wgc.wgcapi.Post.DTO.ResponsePostDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,7 +32,7 @@ public class GuestBookConverter {
 
     public GuestBookResponse toDto(GuestBook guestBook) {
         return new GuestBookResponse(
-                guestBook.getGuestBookId(),
+                guestBook.getId(),
                 guestBook.getWriterMember().getName(),
                 guestBook.getContent()
         );
@@ -52,29 +50,5 @@ public class GuestBookConverter {
         );
     }
 
-//    public ResponseDto toResponse(GuestBook guestBook) {
-//
-//        return Optional.ofNullable(guestBook)
-//                .map(it -> {
-//                             GuestBook.builder()
-//                            .GuestBookId(guestBook.getGuestBookId())
-//                            .content(guestBook.getContent())
-//                            .writerMember(guestBook.getWriterMember())
-//                            .build();
-//
-//                    GuestBookResponse dto = new GuestBookResponse(
-//                            guestBook.getGuestBookId(),guestBook.getContent(),guestBook.getWriterMember().getName());
-//                           return new ResponseDto(dto);
-//                })
-//                .orElseThrow(() -> new APIException(new ResponseDto(HttpStatus.BAD_REQUEST, "Invalid Member Information !")));
-//    }
-//
-//    public ResponseDto toListResponse(GuestBook guestBook) {
-//        return Optional.ofNullable(guestBook)
-//                .map(it -> {
-//                    GuestBookResponse dto = new GuestBookResponse(it.getGuestBookId(),it.getContent(),it.getWriterMember().getName());
-//                    return new ResponseDto(dto);
-//                })
-//                .orElseThrow(() -> new APIException(new ResponseDto(HttpStatus.BAD_REQUEST, "Invalid Member Information !")));
-//    }
+
 }

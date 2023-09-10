@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CustomGuestBookRepository {
 
-    List<GuestBook> findNonDeletedByWriterMember(Member writerMember, Long limit);
+    List<GuestBook> findNonDeletedByWriterMemberId(Long memberId, Long limit);
 }

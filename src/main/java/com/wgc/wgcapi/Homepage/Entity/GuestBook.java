@@ -6,9 +6,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+
+import java.time.LocalDateTime;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -23,7 +27,7 @@ public class GuestBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long GuestBookId;
+    public Long id;
 
     @Column(name = "content")
     public String content;
@@ -35,8 +39,14 @@ public class GuestBook {
     @Column(name = "is_delete")
     public String isDelete;
 
+    @Column(name = "register_date")
+    @CreatedDate
+    private LocalDateTime registerDate;
+
+    @Column(name = "last_update")
+    @LastModifiedDate
+    private LocalDateTime lastUpdateDate;
+
     @PrePersist
-    public void prePersist() {
-        this.isDelete = this.isDelete == null ? "N" : this.isDelete;
-    }
+    public void prePersist() {this.isDelete = this.isDelete == null ? "N" : this.isDelete;}
 }

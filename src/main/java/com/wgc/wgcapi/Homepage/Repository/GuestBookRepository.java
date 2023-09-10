@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface GuestBookRepository extends JpaRepository<GuestBook, Long>, CustomGuestBookRepository {
 
-    List<GuestBook> findByWriterMember(Member writerMember);
+
 
 
 }

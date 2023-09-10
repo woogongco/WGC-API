@@ -7,18 +7,16 @@ by jeon-wangi
 import com.wgc.wgcapi.Common.Annotations.RequireToken;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
 import com.wgc.wgcapi.Homepage.Business.HomePageBusiness;
-import com.wgc.wgcapi.Homepage.Controller.request.GuestBookCreateRequest;
+import com.wgc.wgcapi.Homepage.DTO.GuestBookCreateRequest;
 import com.wgc.wgcapi.Homepage.Service.GuestBookReadService;
 import com.wgc.wgcapi.Member.Entity.Member;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/homepage")
+@RequestMapping("/guest-books")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequiredArgsConstructor
 public class GuestBookController {
@@ -27,21 +25,18 @@ public class GuestBookController {
 
     private final HomePageBusiness homePageBusiness;
 
-    @GetMapping("/post/{userId}")
-    @Operation(summary = "유저 게시글 조회",description = "유저 게시글 조회")
-    public ResponseDto getMiniHompagePosts(
-            @PathVariable("userId")
-            Member member
-    ) {
-        return homepageReadService.getPostByUser(member);
-    }
+//    @GetMapping("/{userId}")
+//    public ResponseDto getMiniHompagePosts(
+//            @PathVariable("userId")
+//            Member member
+//    ) {
+//        return homepageReadService.getPostByUser(member);
+//    }
 
 
-    @PostMapping("/guest-books")
+    @PostMapping
     @RequireToken
-    @Operation(summary = "방명록 작성",description = "방명록 작성")
     public ResponseDto createGuestBooks(
-            @Valid
             @RequestBody
             GuestBookCreateRequest request, HttpServletRequest getMember
     ) {
@@ -49,22 +44,18 @@ public class GuestBookController {
     }
 
 
-    @GetMapping("/guest-books/list")
-    @RequireToken
-    @Operation(summary = "방명록 조회",description = "방명록 조회")
+    @GetMapping("/{id}")
     public ResponseDto searchGuestBooks(
-            HttpServletRequest getMember,
+            @PathVariable(name = "id") Long id,
             @RequestParam(value = "limit", required = false, defaultValue = "10") Long limit
     ) {
-        return homePageBusiness.searchGuestBooks(getMember, limit);
+        return homePageBusiness.searchGuestBooks(id, limit);
     }
 
 
-    @PatchMapping("/guest-books/{id}")
+    @PatchMapping("/{id}")
     @RequireToken
-    @Operation(summary = "방명록 수정",description = "방명록 수정")
     public ResponseDto modifyGuestBooks(
-            @Valid
             @RequestBody
             GuestBookCreateRequest request, HttpServletRequest getMember, @PathVariable(name = "id") Long id
 
@@ -73,9 +64,8 @@ public class GuestBookController {
         return homePageBusiness.modifyGuestBooks(request,getMember, id);
     }
 
-    @DeleteMapping("/guest-books/{id}")
+    @DeleteMapping("/{id}")
     @RequireToken
-    @Operation(summary = "방명록 삭제",description = "방명록 삭제")
     public ResponseDto deleteGuestBooks(
             @PathVariable(name = "id")
             Long id,HttpServletRequest getMember

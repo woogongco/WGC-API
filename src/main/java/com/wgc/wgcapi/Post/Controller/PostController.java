@@ -22,7 +22,7 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    public ResponseDto getPostsByCateogry(@RequestParam(name = "limit", defaultValue = "5") Long limit) {
+    public ResponseDto getPostsByCategory(@RequestParam(name = "limit", defaultValue = "5") Long limit) {
         return this.postService.getPostByCategory(limit);
     }
 

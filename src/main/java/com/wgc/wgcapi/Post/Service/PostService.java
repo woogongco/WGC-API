@@ -119,8 +119,13 @@ public class PostService {
             result.put(category.getKey(), post);
         });
 
-        List<Post> popularArticles = postJpaRepository.findAllByIsDeleteIsOrderByLikeDesc('N', PageRequest.of(0, 10));
-        result.put("popular", popularArticles);
+        List<ResponsePostDto> popularPosts = postJpaRepository
+                .findAllByIsDeleteIsOrderByLikeDesc('N', PageRequest.of(0, 10))
+                .stream()
+                .map(ResponsePostDto::new)
+                .collect(Collectors.toList());
+        result.put("popular", popularPosts);
+
         return new ResponseDto(result);
     }
 

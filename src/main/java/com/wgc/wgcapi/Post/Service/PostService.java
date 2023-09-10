@@ -119,14 +119,20 @@ public class PostService {
             result.put(category.getKey(), post);
         });
 
-        List<ResponsePostDto> popularPosts = postJpaRepository
-                .findAllByIsDeleteIsOrderByLikeDesc('N', PageRequest.of(0, 10))
+        result.put("popular", this.popularPostsAsDto());
+
+        return new ResponseDto(result);
+    }
+
+    private List<ResponsePostDto> popularPostsAsDto() {
+        return getPopularPosts()
                 .stream()
                 .map(ResponsePostDto::new)
                 .collect(Collectors.toList());
-        result.put("popular", popularPosts);
+    }
 
-        return new ResponseDto(result);
+    private List<Post> getPopularPosts() {
+        return postJpaRepository.findAllByIsDeleteIsOrderByLikeDesc('N', PageRequest.of(0, 10));
     }
 
     public ResponseDto likePost(HttpServletRequest request, Long id) {
@@ -138,8 +144,6 @@ public class PostService {
             return new ResponseDto(HttpStatus.NOT_FOUND, "post is not found !");
 
         return postLikeWriteService.like(getMember, getPost);
-
-
     }
 
     public ResponseDto dislikePost(HttpServletRequest request, Long id) {

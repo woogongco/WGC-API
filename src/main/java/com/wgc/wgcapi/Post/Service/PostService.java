@@ -17,6 +17,8 @@ import com.wgc.wgcapi.Post.Repository.PostDataJpaRepository;
 import com.wgc.wgcapi.Post.Repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -117,7 +119,20 @@ public class PostService {
             result.put(category.getKey(), post);
         });
 
+        result.put("popular", this.popularPostsAsDto());
+
         return new ResponseDto(result);
+    }
+
+    private List<ResponsePostDto> popularPostsAsDto() {
+        return getPopularPosts()
+                .stream()
+                .map(ResponsePostDto::new)
+                .collect(Collectors.toList());
+    }
+
+    private List<Post> getPopularPosts() {
+        return postJpaRepository.findAllByIsDeleteIsOrderByLikeDesc('N', PageRequest.of(0, 10));
     }
 
     public ResponseDto likePost(HttpServletRequest request, Long id) {
@@ -129,8 +144,6 @@ public class PostService {
             return new ResponseDto(HttpStatus.NOT_FOUND, "post is not found !");
 
         return postLikeWriteService.like(getMember, getPost);
-
-
     }
 
     public ResponseDto dislikePost(HttpServletRequest request, Long id) {

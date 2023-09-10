@@ -19,7 +19,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MemberController {
 
     private final MemberService service;

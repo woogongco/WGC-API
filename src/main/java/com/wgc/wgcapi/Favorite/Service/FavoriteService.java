@@ -1,7 +1,6 @@
 package com.wgc.wgcapi.Favorite.Service;
 
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
-import com.wgc.wgcapi.Favorite.DTO.FavoriteRequest;
 import com.wgc.wgcapi.Favorite.Entity.Favorite;
 import com.wgc.wgcapi.Favorite.Repository.FavoriteRepository;
 import com.wgc.wgcapi.Member.Entity.Member;
@@ -14,6 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -37,6 +39,21 @@ public class FavoriteService {
         favoriteRepository.save(favorite);
 
         return new ResponseDto(HttpStatus.CREATED);
+    }
+
+
+    public ResponseDto deleteFavorite(Long id, HttpServletRequest request) {
+        Member getMember = memberService.getMemberInfo(request);
+        Post getPost = postService.findPostById(id);
+        Optional<Favorite> existingFavorite = favoriteRepository.findByMemberAndPost(getMember, getPost);
+
+        if(existingFavorite.isEmpty()){
+            return new ResponseDto(HttpStatus.BAD_REQUEST, "Not bookmarked");
+        }
+
+            favoriteRepository.delete(existingFavorite.get());
+            return new ResponseDto(HttpStatus.OK);
+
     }
 
 

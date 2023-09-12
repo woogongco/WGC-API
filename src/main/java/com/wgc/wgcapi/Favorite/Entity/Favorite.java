@@ -34,7 +34,13 @@ public class Favorite  {
     @Column(name = "favorite_at")
     @CreatedDate
     private LocalDateTime favoriteAt;
+    @Embedded
+    private Favorites favorites = Favorites.empty();
 
+    public  Favorite (Member member, Post post) {
+    this.member = member;
+    this.post = post;
+    }
     public void setPost(Post getPost) {
         this.post = getPost;
     }
@@ -45,8 +51,5 @@ public class Favorite  {
         getFavorites().addFavorite(this);
     }
 
-
-    @Embedded
-    private Favorites favorites = Favorites.empty();
 
 }

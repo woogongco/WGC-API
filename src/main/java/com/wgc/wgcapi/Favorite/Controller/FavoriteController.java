@@ -23,5 +23,9 @@ public class FavoriteController {
     public ResponseDto addFavorite(@PathVariable(name = "id") Long id, HttpServletRequest request) {
         return this.favoriteService.addFavorite(id,request);
     }
-
+    @DeleteMapping("/{id}")
+    @RequireToken
+    public ResponseDto deleteFavorite(@PathVariable(name = "id") Long id, HttpServletRequest request) {
+        return this.favoriteService.deleteFavorite(id,request);
+    }
 }

@@ -5,6 +5,7 @@ import com.wgc.wgcapi.Favorite.Entity.Favorite;
 import com.wgc.wgcapi.Favorite.Repository.FavoriteRepository;
 import com.wgc.wgcapi.Member.Entity.Member;
 import com.wgc.wgcapi.Member.Service.MemberService;
+import com.wgc.wgcapi.Post.DTO.ResponsePostDto;
 import com.wgc.wgcapi.Post.Entity.Post;
 import com.wgc.wgcapi.Post.Service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -57,5 +60,17 @@ public class FavoriteService {
     }
 
 
+    public ResponseDto getFavorite(HttpServletRequest request) {
+        Member getMember = memberService.getMemberInfo(request);
+        List<Favorite> memberFavorites = favoriteRepository.findByMember(getMember);
 
+        List<ResponsePostDto> favoritePosts = memberFavorites.stream()
+                .map(Favorite::getPost)
+                .map(ResponsePostDto::new)
+                .collect(Collectors.toList());
+
+        return new ResponseDto(favoritePosts);
+
+
+    }
 }

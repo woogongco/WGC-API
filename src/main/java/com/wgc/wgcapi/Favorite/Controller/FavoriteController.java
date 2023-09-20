@@ -28,4 +28,12 @@ public class FavoriteController {
     public ResponseDto deleteFavorite(@PathVariable(name = "id") Long id, HttpServletRequest request) {
         return this.favoriteService.deleteFavorite(id,request);
     }
+
+    @GetMapping
+    @RequireToken
+    public ResponseDto getFavorite(HttpServletRequest request) {
+        return this.favoriteService.getFavorite(request);
+    }
+
+
 }

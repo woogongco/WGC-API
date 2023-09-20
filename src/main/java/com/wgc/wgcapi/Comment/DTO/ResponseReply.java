@@ -16,11 +16,9 @@ public class ResponseReply {
 
     private Long replyId;
     private String content;
-
     private LocalDateTime registerDate;
     private LocalDateTime lastModifiedDate;
     private MemberDto writer;
-
 
     public ResponseReply(Long replyId, String content, LocalDateTime registerDate, LocalDateTime lastModifiedDate, Member writer) {
         this.replyId = replyId;
@@ -28,9 +26,6 @@ public class ResponseReply {
         this.registerDate = registerDate;
         this.lastModifiedDate = lastModifiedDate;
         this.writer = new MemberDto(writer);
-
-
-
     }
 
     public static ResponseReply of(Comment reply, Member getMember) {

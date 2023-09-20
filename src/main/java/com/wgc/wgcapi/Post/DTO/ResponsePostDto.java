@@ -50,6 +50,4 @@ public class ResponsePostDto {
         this.registerDate = post.getRegisterDate();
         this.lastModifiedDate = post.getLastUpdateDate();
     }
-
-
 }

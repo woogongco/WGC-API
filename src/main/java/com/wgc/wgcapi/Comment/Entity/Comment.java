@@ -6,6 +6,7 @@ import com.wgc.wgcapi.Post.Entity.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -23,11 +24,9 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 public class Comment {
 
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
@@ -43,13 +42,8 @@ public class Comment {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+    @Column(name = "content")
     private String content;
-
-
-
-
-
-
 
     @Column(name = "register_date")
     @CreatedDate
@@ -59,22 +53,16 @@ public class Comment {
     @LastModifiedDate
     private LocalDateTime lastUpdateDate;
 
-
     @Column(name = "is_delete")
     private Character isDelete = 'N';
-    @PrePersist
-    private void onPrePersist() {
-        this.registerDate = LocalDateTime.now();
-    }
 
     @Builder
-    public Comment(String content, Post post, Member writer,  Comment parent) {
+    public Comment(String content, Post post, Member writer, Comment parent) {
         this.content = content;
         this.post = post;
         this.writer = writer;
         this.parent = parent;
     }
-
 
     public static Comment parent(Member writer, Post post, String content) {
         return new Comment(content, post, writer, null);
@@ -86,17 +74,10 @@ public class Comment {
         return child;
     }
 
-    public boolean isCommentWriteMember(Member member) {
-        return this.writer == member;
+    @PrePersist
+    private void onPrePersist() {
+        this.registerDate = LocalDateTime.now();
     }
-
-    public void updateContent(String content) {
-        this.content = this.content.equals(content) ? this.content : content;
-    }
-
-
-
-
 
     public boolean isParent() {
         return Objects.isNull(parent);
@@ -111,15 +92,9 @@ public class Comment {
         this.content = dto.getContent();
     }
 
-    public void delete() {
-
-        this.isDelete = 'Y';
-    }
-
     public boolean hasNoReply() {
         return children.isEmpty();
     }
-
 
     public void changePretendingToBeRemoved() {
         this.isDelete = 'Y';
@@ -128,4 +103,4 @@ public class Comment {
     public void deleteChild(Comment reply) {
         this.children.remove(reply);
     }
-    }
+}

@@ -23,6 +23,7 @@ public class MemberDto {
     private String introduction;
     private String color;
     private LocalDateTime registerDateTime;
+    private String profileImage;
 
     public MemberDto(Member member) {
         this.id = member.getId();
@@ -33,5 +34,6 @@ public class MemberDto {
         this.introduction = member.getIntroduction();
         this.color = member.getColor();
         this.github = member.getGithub();
+        this.profileImage = member.getProfileImage();
     }
 }

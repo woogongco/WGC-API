@@ -15,16 +15,12 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseComment {
 
+    List<ResponseReply> replies;
     private Long commentId;
     private String content;
-
     private LocalDateTime registerDate;
     private LocalDateTime lastModifiedDate;
     private MemberDto writer;
-
-    List<ResponseReply> replies;
-
-
 
     public ResponseComment(Long commentId, String content, LocalDateTime registerDate, LocalDateTime lastModifiedDate, Member writer, List<ResponseReply> replies) {
         this.commentId = commentId;
@@ -35,16 +31,17 @@ public class ResponseComment {
         this.replies = replies;
     }
 
-
+    public ResponseComment(Long commentId, List<ResponseReply> replies) {
+        this.commentId = commentId;
+        this.replies = replies;
+    }
 
     public static ResponseComment softRemovedOf(Comment comment, List<ResponseReply> replyResponses) {
-
-        return new ResponseComment(comment.getId(), null, null, null, null, replyResponses);
+        return new ResponseComment(comment.getId(), replyResponses);
     }
 
     public static ResponseComment of(Comment comment, Member writer, List<ResponseReply> replyResponses) {
-    return  new ResponseComment(comment.getId(), comment.getContent(), comment.getRegisterDate(),
-            comment.getLastUpdateDate(), writer, replyResponses);
-
+        return new ResponseComment(comment.getId(), comment.getContent(), comment.getRegisterDate(),
+                comment.getLastUpdateDate(), writer, replyResponses);
     }
 }

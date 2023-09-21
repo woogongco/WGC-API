@@ -10,16 +10,11 @@ import java.util.List;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseComments {
-
     private List<ResponseComment> comments;
-    private int totalCount;
+    private int count;
 
-
-    public ResponseComments(List<ResponseComment> comments, int totalCount) {
+    public ResponseComments(List<ResponseComment> comments, int count) {
         this.comments = comments;
-        this.totalCount = totalCount;
+        this.count = count;
     }
 }
-
-
-

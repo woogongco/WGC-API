@@ -20,6 +20,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -68,6 +69,8 @@ public class Member {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private Set<PostLike> postLikes = new HashSet<>();
 
+    @Column(name = "profile_image")
+    private String profileImage;
 
     public Member(String name, String mail, String password) {
         this.name = name;
@@ -90,8 +93,10 @@ public class Member {
         this.skil = checkIsPresent(this.skil, dto.getSkill());
         this.color = checkIsPresent(this.color, dto.getColor());
         this.introduction = checkIsPresent(this.introduction, dto.getIntroduction());
-        this.password = checkIsPresent(this.password, EncryptUtils.encrypt(dto.getColor()));
+        if (Objects.nonNull(dto.getPassword()))
+            this.password = checkIsPresent(this.password, EncryptUtils.encrypt(dto.getPassword()));
         this.github = checkIsPresent(this.github, dto.getGithub());
+        this.profileImage = dto.getProfileImage();
     }
 
     private String checkIsPresent(String original, String input) {

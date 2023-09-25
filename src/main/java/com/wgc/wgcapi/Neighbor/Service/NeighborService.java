@@ -54,17 +54,17 @@ public class NeighborService {
     public ResponseDto changeNeighborStatus(HttpServletRequest request, String action, Long id) {
         Member member = memberService.getMemberInfo(request);
         NeighborStatus status = getNeighborStatusByString(action);
-
-        if (status.equals(NeighborStatus.DELETE)) {
-            Neighbor neighbor = repository.getNeighbor(member.getId(), id);
-            neighbor.deleteNeighbor();
-            return new ResponseDto(HttpStatus.ACCEPTED);
-        }
         Neighbor neighbor = repository.getNeighborStatus(member.getId(), id);
+
         if (Objects.isNull(neighbor))
             return new ResponseDto(HttpStatus.NOT_FOUND, "Neighbor request Not Found !");
 
-        if(neighbor.getIsAccept() == 'Y')
+        if (status.equals(NeighborStatus.REFUSE)) {
+            neighbor.deleteNeighbor();
+            return new ResponseDto(HttpStatus.ACCEPTED);
+        }
+
+        if (neighbor.getIsAccept() == 'Y')
             return new ResponseDto(HttpStatus.NOT_MODIFIED, "already accepted !");
 
         neighbor.updateRequestStatus(status);

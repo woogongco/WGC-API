@@ -64,6 +64,8 @@ public class NeighborService {
         if (Objects.isNull(neighbor))
             return new ResponseDto(HttpStatus.NOT_FOUND, "Neighbor request Not Found !");
 
+        if(neighbor.getIsAccept() == 'Y')
+            return new ResponseDto(HttpStatus.NOT_MODIFIED, "already accepted !");
 
         neighbor.updateRequestStatus(status);
 

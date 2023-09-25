@@ -72,6 +72,9 @@ public class Member {
     @Column(name = "profile_image")
     private String profileImage;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     public Member(String name, String mail, String password) {
         this.name = name;
         this.mail = mail;
@@ -89,17 +92,18 @@ public class Member {
     }
 
     public void updateInformation(ModifyMemberInformationDto dto) {
-        this.name = checkIsPresent(this.name, dto.getName());
-        this.skil = checkIsPresent(this.skil, dto.getSkill());
-        this.color = checkIsPresent(this.color, dto.getColor());
-        this.introduction = checkIsPresent(this.introduction, dto.getIntroduction());
+        this.name = modifyIfNotEqual(this.name, dto.getName());
+        this.skil = modifyIfNotEqual(this.skil, dto.getSkill());
+        this.color = modifyIfNotEqual(this.color, dto.getColor());
+        this.introduction = modifyIfNotEqual(this.introduction, dto.getIntroduction());
         if (Objects.nonNull(dto.getPassword()))
-            this.password = checkIsPresent(this.password, EncryptUtils.encrypt(dto.getPassword()));
-        this.github = checkIsPresent(this.github, dto.getGithub());
-        this.profileImage = dto.getProfileImage();
+            this.password = modifyIfNotEqual(this.password, EncryptUtils.encrypt(dto.getPassword()));
+        this.github = modifyIfNotEqual(this.github, dto.getGithub());
+        this.profileImage = modifyIfNotEqual(this.profileImage, dto.getProfileImage());
+        this.phoneNumber = modifyIfNotEqual(this.phoneNumber, dto.getPhoneNumber());
     }
 
-    private String checkIsPresent(String original, String input) {
+    private String modifyIfNotEqual(String original, String input) {
         if (input == null || input.isEmpty() || input.isBlank())
             return original;
 

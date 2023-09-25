@@ -18,5 +18,6 @@ public class ModifyMemberInformationDto {
     private String github;
     @JsonProperty("profile_image")
     private String profileImage;
-
+    @JsonProperty("phone_number")
+    private String phoneNumber;
 }

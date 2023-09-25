@@ -60,7 +60,6 @@ public class NeighborService {
             neighbor.deleteNeighbor();
             return new ResponseDto(HttpStatus.ACCEPTED);
         }
-
         Neighbor neighbor = repository.getNeighborStatus(member.getId(), id);
         if (Objects.isNull(neighbor))
             return new ResponseDto(HttpStatus.NOT_FOUND, "Neighbor request Not Found !");

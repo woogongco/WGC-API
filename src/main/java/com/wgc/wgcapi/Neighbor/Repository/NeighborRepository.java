@@ -64,8 +64,8 @@ public class NeighborRepository {
         return query
                 .selectFrom(neighbor)
                 .where(
-                        neighbor.acceptMember.id.eq(currentUserId)
-                                .and(neighbor.requestMember.id.eq(targetUserId))
+                        neighbor.acceptMember.id.eq(targetUserId)
+                                .and(neighbor.requestMember.id.eq(currentUserId))
                                 .and(neighbor.isDelete.eq('N'))
                 )
                 .fetchFirst();

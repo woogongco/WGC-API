@@ -11,7 +11,10 @@ import java.util.Optional;
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
     Optional<Favorite> findByMemberAndPost(Member member, Post post);
+
     boolean existsByMemberAndPost(Member getMember, Post getPost);
 
     List<Favorite> findByMember(Member getMember);
+
+    Integer countByPostId(Long postId);
 }

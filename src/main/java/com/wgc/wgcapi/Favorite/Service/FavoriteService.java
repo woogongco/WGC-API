@@ -1,6 +1,7 @@
 package com.wgc.wgcapi.Favorite.Service;
 
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
+import com.wgc.wgcapi.Favorite.DTO.ResponseFavoriteDto;
 import com.wgc.wgcapi.Favorite.Entity.Favorite;
 import com.wgc.wgcapi.Favorite.Repository.FavoriteRepository;
 import com.wgc.wgcapi.Member.Entity.Member;
@@ -28,37 +29,35 @@ public class FavoriteService {
 
     private final PostService postService;
     private final FavoriteRepository favoriteRepository;
+
     public ResponseDto addFavorite(Long id, HttpServletRequest request) {
 
         Member getMember = memberService.getMemberInfo(request);
         Post getPost = postService.findPostById(id);
         Favorite favorite = new Favorite();
 
-        if(favoriteRepository.existsByMemberAndPost(getMember,getPost)){
+        if (favoriteRepository.existsByMemberAndPost(getMember, getPost)) {
             return new ResponseDto(HttpStatus.BAD_REQUEST, "Already bookmarked");
         }
-        favorite.setPost(getPost);
-        favorite.setMmeber(getMember);
+        favorite.associateWithPost(getPost);
+        favorite.associateWithMember(getMember);
         favoriteRepository.save(favorite);
-
         return new ResponseDto(HttpStatus.CREATED);
     }
-
 
     public ResponseDto deleteFavorite(Long id, HttpServletRequest request) {
         Member getMember = memberService.getMemberInfo(request);
         Post getPost = postService.findPostById(id);
         Optional<Favorite> existingFavorite = favoriteRepository.findByMemberAndPost(getMember, getPost);
 
-        if(existingFavorite.isEmpty()){
+        if (existingFavorite.isEmpty()) {
             return new ResponseDto(HttpStatus.BAD_REQUEST, "Not bookmarked");
         }
 
-            favoriteRepository.delete(existingFavorite.get());
-            return new ResponseDto(HttpStatus.OK);
+        favoriteRepository.delete(existingFavorite.get());
+        return new ResponseDto(HttpStatus.OK);
 
     }
-
 
     public ResponseDto getFavorite(HttpServletRequest request) {
         Member getMember = memberService.getMemberInfo(request);
@@ -68,9 +67,14 @@ public class FavoriteService {
                 .map(Favorite::getPost)
                 .map(ResponsePostDto::new)
                 .collect(Collectors.toList());
-
         return new ResponseDto(favoritePosts);
 
+    }
+
+    public ResponseDto getFavoriteByPostId(Long postId) {
+        Integer countByPostId = favoriteRepository.countByPostId(postId);
+        ResponseFavoriteDto responseFavoriteDto = new ResponseFavoriteDto(countByPostId);
+        return new ResponseDto(responseFavoriteDto);
 
     }
 }

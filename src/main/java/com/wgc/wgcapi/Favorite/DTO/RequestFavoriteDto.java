@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class FavoriteRequest {
+public class RequestFavoriteDto {
 
     private Long postId;
 }

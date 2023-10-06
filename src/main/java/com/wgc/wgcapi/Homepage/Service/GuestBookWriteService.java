@@ -35,15 +35,10 @@ public class GuestBookWriteService {
 
     }
 
-    public ResponseDto searchGuestBooks(Long memberId, Long limit) {
-        List<GuestBook> nonDeletedByWriterMemberId = guestBookRepository.findNonDeletedByWriterMemberId(memberId, limit);
-        return new ResponseDto(nonDeletedByWriterMemberId);
-
-    }
 
     public ResponseDto modifyGuestBooks(GuestBookCreateRequest request, HttpServletRequest getMember, Long id) {
         Member writerMember = memberService.getMemberInfo(getMember);
-        GuestBook guestBook = this.findGuestById(id);
+        GuestBook guestBook = this.markGuestBookAsDeleted(id);
         guestBook.edit(request, writerMember);
         return new ResponseDto(HttpStatus.OK);
 
@@ -51,15 +46,15 @@ public class GuestBookWriteService {
 
     public ResponseDto deleteGuestBooks(HttpServletRequest getMember, Long id) {
         Member writerMember = memberService.getMemberInfo(getMember);
-        GuestBook guestBook = this.findGuestById(id);
+        GuestBook guestBook = this.markGuestBookAsDeleted(id);
         checkWriter(writerMember, guestBook);
-        guestBook.delete(writerMember);
+        guestBook.delete();
         return new ResponseDto(HttpStatus.OK);
 
     }
 
-    public GuestBook findGuestById(Long id) {
-        return this.guestBookRepository.findByIdAndIsDelete(id, 'N');
+    public GuestBook markGuestBookAsDeleted(Long id) {
+        return this.guestBookRepository.findByIdAndIsDeleteEquals(id, 'N');
 
     }
 

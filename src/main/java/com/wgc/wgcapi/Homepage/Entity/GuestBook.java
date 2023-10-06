@@ -38,7 +38,7 @@ public class GuestBook {
     public Member writerMember;
 
     @Column(name = "is_delete")
-    public String isDelete;
+    private Character isDelete;
 
     @Column(name = "register_date")
     @CreatedDate
@@ -58,8 +58,7 @@ public class GuestBook {
         this.writerMember = writerMember;
     }
 
-    public void delete(Member writerMember) {
-        this.writerMember = writerMember;
-        this.isDelete = "Y";
+    public void delete() {
+        this.isDelete = 'Y';
     }
 }

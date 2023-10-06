@@ -23,11 +23,6 @@ public class GuestBookController {
     private final GuestBookReadService homepageReadService;
     private final GuestBookWriteService homepageWriteService;
 
-    @GetMapping("/{userId}")
-    public ResponseDto getMiniHompagePosts(@PathVariable("userId") Member member) {
-        return this.homepageReadService.getPostByUser(member);
-    }
-
     @PostMapping
     @RequireToken
     public ResponseDto createGuestBooks(@RequestBody GuestBookCreateRequest request,
@@ -35,14 +30,14 @@ public class GuestBookController {
         return this.homepageWriteService.createGuestBooks(getMember, request);
     }
 
-    @GetMapping("/{id}")
-    public ResponseDto searchGuestBooks(@PathVariable(name = "id") Long id,
-                                        @RequestParam(value = "limit", required = false, defaultValue = "10")
-                                        Long limit) {
-        return this.homepageWriteService.searchGuestBooks(id, limit);
+    @GetMapping("/{memberId}")
+    public ResponseDto getMiniHompagePosts(@PathVariable("memberId") Member member,
+                                           @RequestParam(value = "limit", required = false, defaultValue = "10")
+                                           Long limit) {
+        return this.homepageReadService.getPostByUser(member,limit);
     }
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     @RequireToken
     public ResponseDto modifyGuestBooks(@RequestBody GuestBookCreateRequest request,
                                         HttpServletRequest getMember,

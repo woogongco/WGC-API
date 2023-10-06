@@ -3,6 +3,7 @@ package com.wgc.wgcapi.Homepage.Repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wgc.wgcapi.Homepage.Entity.GuestBook;
+import com.wgc.wgcapi.Homepage.Entity.QGuestBook;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class GuestBookRepositoryImpl implements CustomGuestBookRepository {
                 .selectFrom(guestBook)
                 .where(
                         guestBook.writerMember.id.eq(writerMemberId),
-                        guestBook.isDelete.eq("N")
+                        guestBook.isDelete.eq('N')
                 )
                 .orderBy(guestBook.id.desc())
                 .limit(limit)

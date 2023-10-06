@@ -5,6 +5,8 @@ by jeon-wangi
 */
 
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
+import com.wgc.wgcapi.Homepage.DTO.GuestBookResponse;
+import com.wgc.wgcapi.Homepage.Repository.GuestBookRepository;
 import com.wgc.wgcapi.Member.Entity.Member;
 import com.wgc.wgcapi.Post.DTO.ResponsePostDto;
 import com.wgc.wgcapi.Post.Service.PostService;
@@ -21,15 +23,14 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional
 public class GuestBookReadService {
+    private final GuestBookRepository guestBookRepository;
 
-    private final PostService postService;
-
-    public ResponseDto getPostByUser(Member member) {
-        List<ResponsePostDto> posts = postService.getPostByUserId(member)
+    public ResponseDto getPostByUser(Member member, Long limit) {
+        List<GuestBookResponse>guestbooks = guestBookRepository.findNonDeletedByWriterMemberId(member.getId(), limit)
                 .stream()
-                .map(ResponsePostDto::new)
+                .map(GuestBookResponse::new)
                 .collect(Collectors.toList());
 
-        return new ResponseDto(posts);
+        return new ResponseDto(guestbooks);
     }
 }

@@ -1,6 +1,8 @@
 package com.wgc.wgcapi.Homepage.DTO;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.wgc.wgcapi.Homepage.Entity.GuestBook;
+import com.wgc.wgcapi.Member.DTO.MemberDto;
 import com.wgc.wgcapi.Member.Entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,12 +16,11 @@ public class GuestBookResponse {
 
     private Long guestBookId;
     private String content;
-    private String writer;
+    private MemberDto writer;
 
-    public GuestBookResponse(Long guestBookId, String writer, String content) {
-        this.guestBookId = guestBookId;
-        this.writer = writer;
-        this.content = content;
-
+    public GuestBookResponse(GuestBook guestBook) {
+        this.guestBookId = guestBook.getId();
+        this.writer = new MemberDto(guestBook.getWriterMember());
+        this.content = guestBook.getContent();
     }
 }

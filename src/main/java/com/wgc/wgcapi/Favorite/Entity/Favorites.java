@@ -24,10 +24,6 @@ public class Favorites {
     }
 
     public void addFavorite(Favorite favorite) {
-
         favorites.add(favorite);
     }
-
-
-
 }

@@ -8,16 +8,18 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.HttpStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
+@EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Entity
-public class Favorite  {
+public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,26 +32,23 @@ public class Favorite  {
     @JoinColumn(name = "post_id")
     private Post post;
 
-
     @Column(name = "favorite_at")
     @CreatedDate
     private LocalDateTime favoriteAt;
     @Embedded
     private Favorites favorites = Favorites.empty();
 
-    public  Favorite (Member member, Post post) {
-    this.member = member;
-    this.post = post;
+    public Favorite(Member member, Post post) {
+        this.member = member;
+        this.post = post;
     }
-    public void setPost(Post getPost) {
+
+    public void associateWithPost(Post getPost) {
         this.post = getPost;
     }
 
-    public void setMmeber(Member getMember) {
-
+    public void associateWithMember(Member getMember) {
         this.member = getMember;
         getFavorites().addFavorite(this);
     }
-
-
 }

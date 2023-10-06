@@ -2,6 +2,7 @@ package com.wgc.wgcapi.Homepage.DTO;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wgc.wgcapi.Homepage.Entity.GuestBook;
+import com.wgc.wgcapi.Member.Entity.Member;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +14,7 @@ public class GuestBookCreateRequest {
 
     private String content;
 
-    public GuestBookCreateRequest(GuestBook guestBook) {
-        this.content = guestBook.getContent();
+    public GuestBook asGuestBookEntity(Member writerMember) {
+        return new GuestBook(writerMember, this);
     }
 }

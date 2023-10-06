@@ -1,5 +1,6 @@
 package com.wgc.wgcapi.Homepage.Entity;
 
+import com.wgc.wgcapi.Homepage.DTO.GuestBookCreateRequest;
 import com.wgc.wgcapi.Member.Entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,13 +17,13 @@ import java.time.LocalDateTime;
 
 import static lombok.AccessLevel.PROTECTED;
 
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @DynamicUpdate
 @Builder(toBuilder = true)
 @Getter
+@Entity
 public class GuestBook {
 
     @Id
@@ -47,6 +48,18 @@ public class GuestBook {
     @LastModifiedDate
     private LocalDateTime lastUpdateDate;
 
-    @PrePersist
-    public void prePersist() {this.isDelete = this.isDelete == null ? "N" : this.isDelete;}
+    public GuestBook(Member writerMember, GuestBookCreateRequest guestBookCreateRequest) {
+        this.writerMember = writerMember;
+        this.content = guestBookCreateRequest.getContent();
+    }
+
+    public void edit(GuestBookCreateRequest request, Member writerMember) {
+        this.content = request.getContent();
+        this.writerMember = writerMember;
+    }
+
+    public void delete(Member writerMember) {
+        this.writerMember = writerMember;
+        this.isDelete = "Y";
+    }
 }

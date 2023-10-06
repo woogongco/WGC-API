@@ -3,11 +3,7 @@ package com.wgc.wgcapi.Homepage.Repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wgc.wgcapi.Homepage.Entity.GuestBook;
-import com.wgc.wgcapi.Homepage.Entity.QGuestBook;
-import com.wgc.wgcapi.Member.Entity.Member;
-import com.wgc.wgcapi.Member.Entity.QMember;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +16,6 @@ public class GuestBookRepositoryImpl implements CustomGuestBookRepository {
 
     private final JPAQueryFactory query;
     private final QGuestBook guestBook = QGuestBook.guestBook;
-
-
 
     @Override
     public List<GuestBook> findNonDeletedByWriterMemberId(Long writerMemberId, Long limit) {

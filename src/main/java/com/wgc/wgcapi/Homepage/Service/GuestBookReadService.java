@@ -5,15 +5,11 @@ by jeon-wangi
 */
 
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
-import com.wgc.wgcapi.Common.Exception.APIException;
-import com.wgc.wgcapi.Homepage.Entity.GuestBook;
-import com.wgc.wgcapi.Homepage.Repository.GuestBookRepository;
 import com.wgc.wgcapi.Member.Entity.Member;
 import com.wgc.wgcapi.Post.DTO.ResponsePostDto;
 import com.wgc.wgcapi.Post.Service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,8 +23,6 @@ import java.util.stream.Collectors;
 public class GuestBookReadService {
 
     private final PostService postService;
-    private final GuestBookRepository guestBookRepository;
-
 
     public ResponseDto getPostByUser(Member member) {
         List<ResponsePostDto> posts = postService.getPostByUserId(member)
@@ -37,9 +31,5 @@ public class GuestBookReadService {
                 .collect(Collectors.toList());
 
         return new ResponseDto(posts);
-    }
-
-    public GuestBook getGuestbooks(Long id) {
-        return guestBookRepository.findById(id).orElseThrow(() -> new APIException(new ResponseDto(HttpStatus.BAD_REQUEST, "No GuestBook found with the provided ID: " + id)));
     }
 }

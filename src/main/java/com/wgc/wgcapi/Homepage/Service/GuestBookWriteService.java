@@ -5,56 +5,68 @@ by jeon-wangi
 */
 
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
-import com.wgc.wgcapi.Common.Exception.APIException;
+import com.wgc.wgcapi.Homepage.DTO.GuestBookCreateRequest;
 import com.wgc.wgcapi.Homepage.Entity.GuestBook;
 import com.wgc.wgcapi.Homepage.Repository.GuestBookRepository;
 import com.wgc.wgcapi.Member.Entity.Member;
+import com.wgc.wgcapi.Member.Service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
 public class GuestBookWriteService {
-
-
+    private final MemberService memberService;
     private final GuestBookRepository guestBookRepository;
 
-    public GuestBook createGuestBooks(GuestBook guestBook) {
-        return Optional.ofNullable(guestBook)
-                .map(it -> guestBookRepository.save(guestBook))
-                .orElseThrow(() -> new APIException(new ResponseDto(HttpStatus.BAD_REQUEST, "GuestBook creation failed. The provided GuestBook object is null.")));
+    public ResponseDto createGuestBooks(HttpServletRequest getMember, GuestBookCreateRequest request) {
+        Member writerMember = memberService.getMemberInfo(getMember);
+        GuestBook guestBook = request.asGuestBookEntity(writerMember);
+        guestBookRepository.save(guestBook);
+        return new ResponseDto(HttpStatus.OK);
+
     }
 
-    public List<GuestBook> searchGuestBooks(Long memberId, Long limit) {
-        return guestBookRepository.findNonDeletedByWriterMemberId(memberId, limit);
+    public ResponseDto searchGuestBooks(Long memberId, Long limit) {
+        List<GuestBook> nonDeletedByWriterMemberId = guestBookRepository.findNonDeletedByWriterMemberId(memberId, limit);
+        return new ResponseDto(nonDeletedByWriterMemberId);
+
     }
 
+    public ResponseDto modifyGuestBooks(GuestBookCreateRequest request, HttpServletRequest getMember, Long id) {
+        Member writerMember = memberService.getMemberInfo(getMember);
+        GuestBook guestBook = this.findGuestById(id);
+        guestBook.edit(request, writerMember);
+        return new ResponseDto(HttpStatus.OK);
 
-    public GuestBook modifyGuestBooks(GuestBook updateGuestBook, Long id) {
-        return guestBookRepository.findById(id)
-                .map(existingGuestBook -> {
-                    GuestBook updatedGuestBook = GuestBook.builder()
-                            .id(existingGuestBook.getId())
-                            .content(updateGuestBook.getContent())
-                            .writerMember(existingGuestBook.getWriterMember())
-                            .build();
-                    return guestBookRepository.save(updatedGuestBook);
-                })
-                .orElseThrow(() -> new APIException(new ResponseDto(HttpStatus.BAD_REQUEST, "Modification failed. GuestBook with the provided ID not found.")));
     }
 
-    public void deleteGuestBooks(GuestBook getGuestBook) {
-        GuestBook deleteGuestBook =  getGuestBook.toBuilder()
-                .isDelete("Y")
-                .build();
-        guestBookRepository.save(deleteGuestBook);
+    public ResponseDto deleteGuestBooks(HttpServletRequest getMember, Long id) {
+        Member writerMember = memberService.getMemberInfo(getMember);
+        GuestBook guestBook = this.findGuestById(id);
+        checkWriter(writerMember, guestBook);
+        guestBook.delete(writerMember);
+        return new ResponseDto(HttpStatus.OK);
+
+    }
+
+    public GuestBook findGuestById(Long id) {
+        return this.guestBookRepository.findByIdAndIsDelete(id, 'N');
+
+    }
+
+    public void checkWriter(Member writerMember, GuestBook guestBook) {
+        if (!writerMember.getId().equals(guestBook.getWriterMember().getId())) {
+            new ResponseDto(HttpStatus.BAD_REQUEST);
+
+        }
     }
 }

@@ -3,12 +3,14 @@ package com.wgc.wgcapi.Comment.Entity;
 import com.wgc.wgcapi.Comment.DTO.RequestComment;
 import com.wgc.wgcapi.Member.Entity.Member;
 import com.wgc.wgcapi.Post.Entity.Post;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,9 +21,11 @@ import java.util.Objects;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
-@Entity
 @NoArgsConstructor
+@AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @Getter
+@Entity
 public class Comment {
 
     @Id

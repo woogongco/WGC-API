@@ -31,10 +31,10 @@ public class GuestBookController {
     }
 
     @GetMapping("/{memberId}")
-    public ResponseDto getMiniHompagePosts(@PathVariable("memberId") Member member,
+    public ResponseDto getGuestBooks(@PathVariable("memberId") Member member,
                                            @RequestParam(value = "limit", required = false, defaultValue = "10")
                                            Long limit) {
-        return this.homepageReadService.getPostByUser(member,limit);
+        return this.homepageReadService.getGuestBooksByUser(member,limit);
     }
 
     @PutMapping("/{id}")

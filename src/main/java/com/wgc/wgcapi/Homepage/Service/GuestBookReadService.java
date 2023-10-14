@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class GuestBookReadService {
     private final GuestBookRepository guestBookRepository;
 
-    public ResponseDto getPostByUser(Member member, Long limit) {
+    public ResponseDto getGuestBooksByUser(Member member, Long limit) {
         List<GuestBookResponse> guestbooks = guestBookRepository.findNonDeletedByWriterMemberId(member.getId(), limit)
                 .stream()
                 .map(GuestBookResponse::new)

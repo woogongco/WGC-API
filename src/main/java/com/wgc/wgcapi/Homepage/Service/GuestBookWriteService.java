@@ -35,7 +35,6 @@ public class GuestBookWriteService {
 
     }
 
-
     public ResponseDto modifyGuestBooks(GuestBookCreateRequest request, HttpServletRequest getMember, Long id) {
         Member writerMember = memberService.getMemberInfo(getMember);
         GuestBook guestBook = this.markGuestBookAsDeleted(id);

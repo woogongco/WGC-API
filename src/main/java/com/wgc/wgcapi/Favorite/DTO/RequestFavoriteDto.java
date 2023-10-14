@@ -9,6 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class RequestFavoriteDto {
-
     private Long postId;
 }

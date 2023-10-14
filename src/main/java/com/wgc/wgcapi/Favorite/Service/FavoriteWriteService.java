@@ -23,11 +23,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class FavoriteService {
+public class FavoriteWriteService {
 
     private final MemberService memberService;
 
     private final PostService postService;
+
     private final FavoriteRepository favoriteRepository;
 
     public ResponseDto addFavorite(Long id, HttpServletRequest request) {
@@ -39,6 +40,7 @@ public class FavoriteService {
         if (favoriteRepository.existsByMemberAndPost(getMember, getPost)) {
             return new ResponseDto(HttpStatus.BAD_REQUEST, "Already bookmarked");
         }
+
         favorite.associateWithPost(getPost);
         favorite.associateWithMember(getMember);
         favoriteRepository.save(favorite);
@@ -56,25 +58,6 @@ public class FavoriteService {
 
         favoriteRepository.delete(existingFavorite.get());
         return new ResponseDto(HttpStatus.OK);
-
-    }
-
-    public ResponseDto getFavorite(HttpServletRequest request) {
-        Member getMember = memberService.getMemberInfo(request);
-        List<Favorite> memberFavorites = favoriteRepository.findByMember(getMember);
-
-        List<ResponsePostDto> favoritePosts = memberFavorites.stream()
-                .map(Favorite::getPost)
-                .map(ResponsePostDto::new)
-                .collect(Collectors.toList());
-        return new ResponseDto(favoritePosts);
-
-    }
-
-    public ResponseDto getFavoriteByPostId(Long postId) {
-        Integer countByPostId = favoriteRepository.countByPostId(postId);
-        ResponseFavoriteDto responseFavoriteDto = new ResponseFavoriteDto(countByPostId);
-        return new ResponseDto(responseFavoriteDto);
 
     }
 }

@@ -23,6 +23,11 @@ public class MemberController {
 
     private final MemberService service;
 
+    @GetMapping("/{id}")
+    public ResponseDto findMemberById(@PathVariable("id")Long id){
+        return service.findMemberById(id);
+    }
+
     @PostMapping
     public ResponseDto signUp(@RequestBody SignUpUserDto dto) {
         return service.signUp(dto);

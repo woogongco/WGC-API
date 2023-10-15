@@ -25,6 +25,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Objects;
 
+import static java.util.Objects.*;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -39,8 +41,7 @@ public class MemberService {
     public ResponseDto signUp(SignUpUserDto dto) {
         try {
             Member member = memberRepository.findByMail(dto.getMail());
-            if (Objects.nonNull(member))
-                return new ResponseDto(HttpStatus.BAD_REQUEST, "Member is already exist !");
+            if (nonNull(member)) return new ResponseDto(HttpStatus.BAD_REQUEST, "Member is already exist !");
 
             memberRepository.save(dto.asEntity());
             return new ResponseDto(HttpStatus.CREATED, HttpStatus.CREATED.getReasonPhrase());
@@ -54,8 +55,7 @@ public class MemberService {
         String encryptPassword = EncryptUtils.encrypt(dto.getPassword());
         log.info("id = {} ,before pw = {} ,pw = {}", dto.getMail(), dto.getPassword(), encryptPassword);
         Member member = memberRepository.findMemberByMailIsAndPasswordIs(dto.getMail(), encryptPassword);
-        if (Objects.isNull(member))
-            return new ResponseDto(HttpStatus.BAD_REQUEST, "User is not found !");
+        if (isNull(member)) return new ResponseDto(HttpStatus.BAD_REQUEST, "User is not found !");
 
         String token = authenticationService.getAuthenticationToken(member);
         return new ResponseDto(token);
@@ -63,8 +63,7 @@ public class MemberService {
 
     public ResponseDto modifyIntroduction(HttpServletRequest request, Map<String, String> param) {
         Member member = getMemberInfo(request);
-        if (Objects.isNull(member))
-            return new ResponseDto(HttpStatus.BAD_REQUEST, "Invalid Member Information !");
+        if (isNull(member)) return new ResponseDto(HttpStatus.BAD_REQUEST, "Invalid Member Information !");
 
         Member findMember = memberRepository.findById(member.getId()).get();
         findMember.updateIntroduction(param);
@@ -79,8 +78,7 @@ public class MemberService {
 
     public ResponseDto getMyInformation(HttpServletRequest request) {
         Member myInformation = this.getMemberInfo(request);
-        if (Objects.isNull(myInformation))
-            return new ResponseDto(HttpStatus.NOT_FOUND, "Information not found !");
+        if (isNull(myInformation)) return new ResponseDto(HttpStatus.NOT_FOUND, "Information not found !");
 
         return new ResponseDto(HttpStatus.OK, myInformation.asDto());
     }
@@ -99,5 +97,13 @@ public class MemberService {
 
     public Member findById(Long id) {
         return memberRepositoryImpl.find(id);
+    }
+
+    public ResponseDto findMemberById(Long id) {
+        Member memberById = memberRepository.findMemberByIdIs(id);
+        if (isNull(memberById))
+            return new ResponseDto(HttpStatus.NOT_FOUND, "Member Info Not Found !");
+
+        return new ResponseDto(HttpStatus.OK, memberById.asDto());
     }
 }

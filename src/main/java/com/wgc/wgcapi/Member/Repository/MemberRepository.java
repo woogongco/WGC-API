@@ -13,4 +13,6 @@ public interface MemberRepository extends JpaRepository<Member, Long>, CrudRepos
     Member findByMail(String mail);
 
     Member findMemberByMailIsAndPasswordIs(String name, String password);
+
+    Member findMemberByIdIs(Long id);
 }

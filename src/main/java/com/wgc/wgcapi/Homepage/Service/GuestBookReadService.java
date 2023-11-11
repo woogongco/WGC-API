@@ -5,9 +5,9 @@ by jeon-wangi
 */
 
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
+import com.wgc.wgcapi.Homepage.DTO.ResponseGuestBookDto;
+import com.wgc.wgcapi.Homepage.Repository.GuestBookRepository;
 import com.wgc.wgcapi.Member.Entity.Member;
-import com.wgc.wgcapi.Post.DTO.ResponsePostDto;
-import com.wgc.wgcapi.Post.Service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,16 +20,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class HomepageService {
+public class GuestBookReadService {
+    private final GuestBookRepository guestBookRepository;
 
-    private final PostService postService;
-
-    public ResponseDto getPostByUser(Member member) {
-        List<ResponsePostDto> posts = postService.getPostByUserId(member)
+    public ResponseDto getGuestBooksByUser(Member member, Long limit) {
+        List<ResponseGuestBookDto> guestbooks = guestBookRepository.findNonDeletedByWriterMemberId(member.getId(), limit)
                 .stream()
-                .map(ResponsePostDto::new)
+                .map(guestBook -> new ResponseGuestBookDto(guestBook, guestBook.getWriterMember()))
                 .collect(Collectors.toList());
-
-        return new ResponseDto(posts);
+        return new ResponseDto(guestbooks);
     }
 }

@@ -1,6 +1,6 @@
 package com.wgc.wgcapi.Homepage.Entity;
 
-import com.wgc.wgcapi.Homepage.DTO.GuestBookCreateRequest;
+import com.wgc.wgcapi.Homepage.DTO.GuestBookDto;
 import com.wgc.wgcapi.Member.Entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,8 +14,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
-
-import static lombok.AccessLevel.PROTECTED;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -48,12 +46,12 @@ public class GuestBook {
     @LastModifiedDate
     private LocalDateTime lastUpdateDate;
 
-    public GuestBook(Member writerMember, GuestBookCreateRequest guestBookCreateRequest) {
+    public GuestBook(Member writerMember, GuestBookDto guestBookCreateRequest) {
         this.writerMember = writerMember;
         this.content = guestBookCreateRequest.getContent();
     }
 
-    public void edit(GuestBookCreateRequest request, Member writerMember) {
+    public void edit(GuestBookDto request, Member writerMember) {
         this.content = request.getContent();
         this.writerMember = writerMember;
     }

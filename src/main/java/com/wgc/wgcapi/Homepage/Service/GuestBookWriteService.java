@@ -5,7 +5,7 @@ by jeon-wangi
 */
 
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
-import com.wgc.wgcapi.Homepage.DTO.GuestBookCreateRequest;
+import com.wgc.wgcapi.Homepage.DTO.GuestBookDto;
 import com.wgc.wgcapi.Homepage.Entity.GuestBook;
 import com.wgc.wgcapi.Homepage.Repository.GuestBookRepository;
 import com.wgc.wgcapi.Member.Entity.Member;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class GuestBookWriteService {
     private final MemberService memberService;
     private final GuestBookRepository guestBookRepository;
 
-    public ResponseDto createGuestBooks(HttpServletRequest getMember, GuestBookCreateRequest request) {
+    public ResponseDto createGuestBooks(HttpServletRequest getMember, GuestBookDto request) {
         Member writerMember = memberService.getMemberInfo(getMember);
         GuestBook guestBook = request.asGuestBookEntity(writerMember);
         guestBookRepository.save(guestBook);
@@ -35,7 +34,7 @@ public class GuestBookWriteService {
 
     }
 
-    public ResponseDto modifyGuestBooks(GuestBookCreateRequest request, HttpServletRequest getMember, Long id) {
+    public ResponseDto modifyGuestBooks(GuestBookDto request, HttpServletRequest getMember, Long id) {
         Member writerMember = memberService.getMemberInfo(getMember);
         GuestBook guestBook = this.markGuestBookAsDeleted(id);
         guestBook.edit(request, writerMember);

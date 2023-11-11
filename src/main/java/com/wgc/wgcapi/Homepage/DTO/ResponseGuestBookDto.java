@@ -4,23 +4,21 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wgc.wgcapi.Homepage.Entity.GuestBook;
 import com.wgc.wgcapi.Member.DTO.MemberDto;
 import com.wgc.wgcapi.Member.Entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GuestBookResponse {
+public class ResponseGuestBookDto {
 
-    private Long guestBookId;
+    private Long id;
     private String content;
     private MemberDto writer;
 
-    public GuestBookResponse(GuestBook guestBook) {
-        this.guestBookId = guestBook.getId();
-        this.writer = new MemberDto(guestBook.getWriterMember());
+    public ResponseGuestBookDto(GuestBook guestBook, Member writer) {
+        this.id = guestBook.getId();
         this.content = guestBook.getContent();
+        this.writer = new MemberDto(writer);
     }
 }

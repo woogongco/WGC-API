@@ -6,7 +6,7 @@ by jeon-wangi
 
 import com.wgc.wgcapi.Common.Annotations.RequireToken;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
-import com.wgc.wgcapi.Homepage.DTO.GuestBookCreateRequest;
+import com.wgc.wgcapi.Homepage.DTO.GuestBookDto;
 import com.wgc.wgcapi.Homepage.Service.GuestBookReadService;
 import com.wgc.wgcapi.Homepage.Service.GuestBookWriteService;
 import com.wgc.wgcapi.Member.Entity.Member;
@@ -25,7 +25,7 @@ public class GuestBookController {
 
     @PostMapping
     @RequireToken
-    public ResponseDto createGuestBooks(@RequestBody GuestBookCreateRequest request,
+    public ResponseDto createGuestBooks(@RequestBody GuestBookDto request,
                                         HttpServletRequest getMember) {
         return this.homepageWriteService.createGuestBooks(getMember, request);
     }
@@ -39,7 +39,7 @@ public class GuestBookController {
 
     @PutMapping("/{id}")
     @RequireToken
-    public ResponseDto modifyGuestBooks(@RequestBody GuestBookCreateRequest request,
+    public ResponseDto modifyGuestBooks(@RequestBody GuestBookDto request,
                                         HttpServletRequest getMember,
                                         @PathVariable(name = "id") Long id) {
         return this.homepageWriteService.modifyGuestBooks(request, getMember, id);

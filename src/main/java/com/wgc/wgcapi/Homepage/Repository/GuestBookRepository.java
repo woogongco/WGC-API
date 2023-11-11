@@ -8,7 +8,5 @@ import java.util.Collection;
 import java.util.List;
 
 public interface GuestBookRepository extends JpaRepository<GuestBook, Long>, CustomGuestBookRepository {
-
     GuestBook findByIdAndIsDeleteEquals(Long id, Character isDelete);
-
 }

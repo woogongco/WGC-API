@@ -7,6 +7,7 @@ by jeon-wangi
 import com.wgc.wgcapi.Common.Utils.EncryptUtils;
 import com.wgc.wgcapi.Member.DTO.MemberDto;
 import com.wgc.wgcapi.Member.DTO.ModifyMemberInformationDto;
+import com.wgc.wgcapi.Notification.Entity.Notification;
 import com.wgc.wgcapi.Post.Entity.Post;
 import com.wgc.wgcapi.Post.Entity.PostLike;
 import lombok.AllArgsConstructor;
@@ -68,6 +69,12 @@ public class Member {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     private Set<PostLike> postLikes = new HashSet<>();
+    @OneToMany(mappedBy = "memberTo")
+    private Set<Notification> receivedNotifications = new HashSet<>();
+
+    @OneToMany(mappedBy = "memberFrom")
+    private Set<Notification> sentNotifications = new HashSet<>();
+
 
     @Column(name = "profile_image")
     private String profileImage;

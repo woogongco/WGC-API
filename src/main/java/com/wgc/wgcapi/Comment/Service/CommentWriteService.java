@@ -6,6 +6,9 @@ import com.wgc.wgcapi.Comment.Repository.CommentRepository;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
 import com.wgc.wgcapi.Member.Entity.Member;
 import com.wgc.wgcapi.Member.Service.MemberService;
+import com.wgc.wgcapi.Notification.Entity.Notification;
+import com.wgc.wgcapi.Notification.Entity.NotificationType;
+import com.wgc.wgcapi.Notification.service.NotificationStorageService;
 import com.wgc.wgcapi.Post.Entity.Post;
 import com.wgc.wgcapi.Post.Service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -23,18 +26,25 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class CommentWriteService {
-
     private final CommentRepository commentRepository;
     private final MemberService memberService;
     private final PostService postService;
+    private final NotificationStorageService notificationService;
+    public static final String COMMENT_ADDED_CONTENT = "A comment has been added: %s";
 
     public ResponseDto addComment(RequestComment dto, HttpServletRequest request, Long postId) {
 
         Member getMember = memberService.getMemberInfo(request);
         Post getPost = postService.findPostById(postId);
-
+        String notificationContent = String.format(COMMENT_ADDED_CONTENT, dto.getContent());
         Comment comment = Comment.parent(getMember, getPost, dto.getContent());
-
+        Notification notification = new Notification(
+                notificationContent,
+                NotificationType.COMMENT,
+                getMember,
+                getPost.getWriter()
+        );
+        notificationService.createNotificationStorage(notification);
         commentRepository.save(comment);
 
         return new ResponseDto(HttpStatus.CREATED);
@@ -43,17 +53,20 @@ public class CommentWriteService {
     public ResponseDto addReply(RequestReply dto, HttpServletRequest request, Long commentId) {
 
         Comment parent = this.findPostById(commentId);
-
         Member getMember = memberService.getMemberInfo(request);
-
         if (!parent.isParent()) {
             return new ResponseDto(HttpStatus.NOT_FOUND, "parent is not found !");
         }
-
         Post getPost = parent.getPost();
-
         Comment reply = Comment.child(getMember, getPost, dto.getContent(), parent);
-
+        String notificationContent = String.format(COMMENT_ADDED_CONTENT, dto.getContent());
+        Notification notification = new Notification(
+                notificationContent,
+                NotificationType.COMMENT,
+                getMember,
+                getPost.getWriter()
+        );
+        notificationService.createNotificationStorage(notification);
         commentRepository.save(reply);
 
         return new ResponseDto(HttpStatus.CREATED);

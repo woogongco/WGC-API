@@ -65,7 +65,7 @@ public class Post {
     private LocalDateTime lastUpdateDate;
 
     @Column(name = "is_delete")
-    private Character isDelete;
+    private Character isDelete = 'N';
 
     public Post(Member member, Category category, WritePostDto writePostDto) {
         this.writer = member;
@@ -84,8 +84,12 @@ public class Post {
         this.isDelete = 'Y';
     }
 
-    public void incrementLikeCount() { this.like++;}
+    public void incrementLikeCount() {
+        this.like++;
+    }
 
 
-    public void decrementLikeCount() { this.like--;}
+    public void decrementLikeCount() {
+        this.like--;
+    }
 }

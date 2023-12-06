@@ -1,6 +1,5 @@
 package com.wgc.wgcapi.Homepage.Repository;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wgc.wgcapi.Homepage.Entity.GuestBook;
 import com.wgc.wgcapi.Homepage.Entity.QGuestBook;

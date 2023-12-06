@@ -21,4 +21,6 @@ public interface PostDataJpaRepository extends JpaRepository<Post, Long>, CrudRe
     List<Post> findPostsByWriterIdAndIsDeleteIsOrderByRegisterDateDesc(Long writerId, Character isDelete);
 
     List<Post> findAllByIsDeleteIsOrderByLikeDesc(Character isDelete, Pageable pageable);
+
+    List<Post> findTop10ByIsDeleteIsAndCategoryIdOrderByRegisterDateDesc(char n, Long id);
 }

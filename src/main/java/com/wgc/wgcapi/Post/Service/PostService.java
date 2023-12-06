@@ -18,7 +18,6 @@ import com.wgc.wgcapi.Post.Repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -98,17 +97,16 @@ public class PostService {
         return new ResponseDto(dto);
     }
 
-    public ResponseDto getPostList(Long categoryId) {
-        Category getCategory = this.findCategoryById(categoryId);
+    public ResponseDto getPostList(Long categoryId, Long limit) {
+        Category category = this.findCategoryById(categoryId);
 
-        if (Objects.isNull(getCategory))
+        if (Objects.isNull(category))
             return new ResponseDto(HttpStatus.NOT_FOUND, "category is not found !");
 
-        List<ResponsePostDto> postList = getCategory.getPosts().stream()
-                .map(post -> new ResponsePostDto(post, post.getWriter()))
-                .collect(Collectors.toList());
+        List<Post> posts = postJpaRepository.findTop10ByIsDeleteIsAndCategoryIdOrderByRegisterDateDesc('N', category.getId());
 
-        return new ResponseDto(postList);
+        List<ResponsePostDto> result = posts.stream().map(post -> new ResponsePostDto(post, post.getWriter())).collect(Collectors.toList());
+        return new ResponseDto(result);
     }
 
     public ResponseDto getPostByCategory(Long limit) {

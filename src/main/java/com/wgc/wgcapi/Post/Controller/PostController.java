@@ -55,8 +55,8 @@ public class PostController {
     }
 
     @GetMapping("/category/{categoryId}")
-    public ResponseDto getPostList(@PathVariable(name = "categoryId") Long categoryId) {
-        return this.postService.getPostList(categoryId);
+    public ResponseDto getPostList(@PathVariable(name = "categoryId") Long categoryId, @RequestParam(name = "limit", required = false, defaultValue = "10") Long limit) {
+        return this.postService.getPostList(categoryId, limit);
     }
 
     @PostMapping("/{id}/like")

@@ -4,7 +4,7 @@ Created on 2023/03/09 10:40 PM In Intelli J IDEA
 by jeon-wangi
 */
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wgc.wgcapi.Member.Entity.Member;
 import lombok.Data;
 
@@ -16,6 +16,7 @@ public class MemberDto {
     private Long id;
     private String name;
     private String mail;
+    @JsonIgnore
     private String password;
     private String permission;
     private String skil;

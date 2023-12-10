@@ -36,7 +36,7 @@ public class GuestBook {
     public Member writerMember;
 
     @Column(name = "is_delete")
-    private Character isDelete = 'N';
+    private Character isDelete;
 
     @Column(name = "register_date")
     @CreatedDate

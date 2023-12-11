@@ -71,5 +71,8 @@ public class PostController {
         return this.postService.dislikePost(request, id);
     }
 
-
+    @GetMapping(value = { "/homepage", "/homepage/{id}" })
+    public ResponseDto getPostsByUserId(@PathVariable(name = "id", required = false) Long userId, HttpServletRequest request) throws IllegalAccessException {
+        return this.postService.getPostsByUserId(request, userId);
+    }
 }

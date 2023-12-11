@@ -4,8 +4,10 @@ Created on 2023/04/12 11:54 PM In Intelli J IDEA
 by jeon-wangi
 */
 
+import com.wgc.wgcapi.Authentication.Service.JwtService;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
 import com.wgc.wgcapi.Member.Entity.Member;
+import com.wgc.wgcapi.Member.Repository.MemberRepository;
 import com.wgc.wgcapi.Post.DTO.CategoryDto;
 import com.wgc.wgcapi.Post.DTO.EditPostDto;
 import com.wgc.wgcapi.Post.DTO.ResponsePostDto;
@@ -23,11 +25,10 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,8 @@ public class PostService {
     private final PostDataJpaRepository postJpaRepository;
     private final CategoryDataRepository categoryDataRepository;
     private final PostLikeWriteService postLikeWriteService;
+    private final JwtService jwtService;
+    private final MemberRepository memberRepository;
 
     public ResponseDto writePost(HttpServletRequest request, WritePostDto dto) {
         Member member = this.getMemberInfo(request);
@@ -90,7 +93,7 @@ public class PostService {
 
     public ResponseDto getPost(Long id) {
         Post post = this.findPostById(id);
-        if (Objects.isNull(post))
+        if (isNull(post))
             return new ResponseDto(HttpStatus.NOT_FOUND, "post is not found !");
 
         ResponsePostDto dto = new ResponsePostDto(post, post.getWriter());
@@ -100,7 +103,7 @@ public class PostService {
     public ResponseDto getPostList(Long categoryId, Long limit) {
         Category category = this.findCategoryById(categoryId);
 
-        if (Objects.isNull(category))
+        if (isNull(category))
             return new ResponseDto(HttpStatus.NOT_FOUND, "category is not found !");
 
         List<Post> posts = postJpaRepository.findTop10ByIsDeleteIsAndCategoryIdOrderByRegisterDateDesc('N', category.getId());
@@ -138,7 +141,7 @@ public class PostService {
         Member getMember = this.getMemberInfo(request);
         Post getPost = this.findPostById(id);
 
-        if (Objects.isNull(getPost))
+        if (isNull(getPost))
             return new ResponseDto(HttpStatus.NOT_FOUND, "post is not found !");
 
         return postLikeWriteService.like(getMember, getPost);
@@ -148,7 +151,7 @@ public class PostService {
         Member getMember = this.getMemberInfo(request);
         Post getPost = this.findPostById(id);
 
-        if (Objects.isNull(getPost))
+        if (isNull(getPost))
             return new ResponseDto(HttpStatus.NOT_FOUND, "post is not found !");
 
         return postLikeWriteService.dislike(getMember, getPost);
@@ -165,5 +168,22 @@ public class PostService {
 
     public List<Post> getPostByUserId(Member member) {
         return postJpaRepository.findPostsByWriterIdAndIsDeleteIsOrderByRegisterDateDesc(member.getId(), 'N');
+    }
+
+    public ResponseDto getPostsByUserId(HttpServletRequest request, Long userId) throws IllegalAccessException {
+        if (nonNull(userId)) {
+            Optional<Member> owner = memberRepository.findById(userId);
+            List<ResponsePostDto> result = getPostByUserId(owner.get())
+                    .stream()
+                    .map(i -> new ResponsePostDto(i, i.getWriter()))
+                    .collect(Collectors.toList());
+            return new ResponseDto(HttpStatus.OK, result);
+        }
+
+        Member requestUser = jwtService.validate(request.getHeader("Authorization"));
+        if (isNull(requestUser))
+            throw new IllegalAccessException("토큰이 없거나 user id가 없습니다.");
+
+        return new ResponseDto(HttpStatus.OK, getPostByUserId(requestUser).stream().map(i -> new ResponsePostDto(i, i.getWriter())));
     }
 }

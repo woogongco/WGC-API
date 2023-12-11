@@ -6,6 +6,7 @@ by jeon-wangi
 
 import com.wgc.wgcapi.Common.Annotations.RequireToken;
 import com.wgc.wgcapi.Common.DTO.ResponseDto;
+import com.wgc.wgcapi.Member.Entity.Member;
 import com.wgc.wgcapi.Post.DTO.EditPostDto;
 import com.wgc.wgcapi.Post.DTO.WritePostDto;
 import com.wgc.wgcapi.Post.Service.PostService;
@@ -72,7 +73,7 @@ public class PostController {
     }
 
     @GetMapping(value = { "/homepage", "/homepage/{id}" })
-    public ResponseDto getPostsByUserId(@PathVariable(name = "id", required = false) Long userId, HttpServletRequest request) throws IllegalAccessException {
+    public ResponseDto getPostsByUserId(@PathVariable(name = "id", required = false) Member userId, HttpServletRequest request) throws IllegalAccessException {
         return this.postService.getPostsByUserId(request, userId);
     }
 }

@@ -170,10 +170,9 @@ public class PostService {
         return postJpaRepository.findPostsByWriterIdAndIsDeleteIsOrderByRegisterDateDesc(member.getId(), 'N');
     }
 
-    public ResponseDto getPostsByUserId(HttpServletRequest request, Long userId) throws IllegalAccessException {
-        if (nonNull(userId)) {
-            Optional<Member> owner = memberRepository.findById(userId);
-            List<ResponsePostDto> result = getPostByUserId(owner.get())
+    public ResponseDto getPostsByUserId(HttpServletRequest request, Member member) throws IllegalAccessException {
+        if (nonNull(member)) {
+            List<ResponsePostDto> result = getPostByUserId(member)
                     .stream()
                     .map(i -> new ResponsePostDto(i, i.getWriter()))
                     .collect(Collectors.toList());

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/homepage")
+@RequestMapping("/guestbook")
 @RequiredArgsConstructor
 public class GuestBookController {
 
